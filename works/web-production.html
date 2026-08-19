@@ -96,5 +96,16 @@
 </main>
 
 <script src="../assets/js/header.js?v=10"></script>
+<script>
+/* アクセス計測(GoatCounter)。本番ドメインでだけ動かす:
+   会長のfile://直開き・check.py等の検証閲覧を数字に混ぜないためのゲート */
+if (location.hostname.indexOf("github.io") !== -1) {
+  var gc = document.createElement("script");
+  gc.async = true;
+  gc.src = "https://gc.zgo.at/count.js";
+  gc.setAttribute("data-goatcounter", "https://xora.goatcounter.com/count");
+  document.body.appendChild(gc);
+}
+</script>
 </body>
 </html>
