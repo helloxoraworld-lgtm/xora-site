@@ -171,63 +171,69 @@
   opacity: 0;
 }
 
-/* ===== INPUT / OUTPUT 補助リスト ===== */
+/* ===== INPUT → OUTPUT 帯 =====
+   2026-08-19にHero上の重ね置きから独立セクションへ移設(会長指示)。
+   背景が無地になったため、旧hero__ioの袋文字text-shadow対策は不要になった。 */
 
-.hero__io {
-  position: absolute;
-  z-index: 3;
+.io-strip {
+  border-top: 1px solid var(--xora-border-faint);
+  padding: 76px 24px;
+}
+
+.io-strip__inner {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 64px;
+}
+
+.io-strip__col ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 12.5px;
+  font-size: 14px;
   line-height: 2.05;
-  /* v1.1で調査した「ノウハウ」の末尾が崩れて見えるバグの原因はtext-shadowのボケではなかった。
-     静止画(particle-hands-source.png)自体に明るいボケた光の粒(被写体側のダスト演出)が
-     たまたまその文字の位置に写り込んでおり、半透明の文字色(旧: 86%)だとその輝点が
-     文字の内部まで透けて「別の字形」に見えるほど強く滲んでいた
-     (text-shadowを完全に外しても症状は消えず、これで原因を切り分けた)。
-     直し方: 文字色を不透明にし、四方向+ぼかしの多重text-shadowで輪郭を暗色で
-     完全に縁取る(袋文字に近い処理)。背景がどんな明るさ・色でも文字の可読性が
-     保たれるようにする、という設計に切り替えた。 */
-  color: rgba(243, 240, 232, 1);
-  text-shadow:
-    -1px -1px 1px rgba(3, 8, 15, 1),
-    1px -1px 1px rgba(3, 8, 15, 1),
-    -1px 1px 1px rgba(3, 8, 15, 1),
-    1px 1px 1px rgba(3, 8, 15, 1),
-    0 0 5px rgba(3, 8, 15, 1),
-    0 0 9px rgba(3, 8, 15, 0.9);
-  pointer-events: none;
+  color: var(--xora-text-body);
 }
 
-.hero__io-title {
+.io-strip__title {
   font-size: 12px;
-  letter-spacing: 0.08em;
-  margin: 0 0 8px;
+  letter-spacing: 0.14em;
+  margin: 0 0 10px;
   font-weight: 700;
 }
 
-/* v1.2でstageがHero全面(=hero__inner)になったため、left/rightの基準幅が
-   旧デザイン(右65%カラムのみ)からHero全体幅に変わった。同じ見た目の位置を保つため、
-   %値を「Hero全体幅に対する割合」に換算し直している(単純な旧値の流用ではない)。
-   INPUTは人間側の手(タッチポイントより左)の上方、OUTPUTはAI側の手の下方に来る位置。 */
-.hero__io--input {
-  top: 6%;
-  left: 39%;
-}
-
-.hero__io--input .hero__io-title {
+.io-strip__title--human {
   color: var(--xora-human);
 }
 
-.hero__io--output {
-  bottom: 8%;
-  right: 4%;
-  text-align: right;
+.io-strip__title--ai {
+  color: var(--xora-ai);
 }
 
-.hero__io--output .hero__io-title {
-  color: var(--xora-ai);
+.io-strip__arrow {
+  color: var(--xora-text-muted);
+  font-size: 20px;
+  align-self: center;
+}
+
+@media (max-width: 900px) {
+  .io-strip {
+    padding: 48px 24px;
+  }
+
+  .io-strip__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .io-strip__arrow {
+    align-self: flex-start;
+    transform: rotate(90deg);
+  }
 }
 
 /* ===== スマホ (900px未満) =====
@@ -277,10 +283,5 @@
 
   .hero__desc {
     max-width: none;
-  }
-
-  /* スマホではINPUT/OUTPUTの補助リストは省略してよい（仕様指定） */
-  .hero__io {
-    display: none;
   }
 }

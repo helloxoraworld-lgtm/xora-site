@@ -24,7 +24,7 @@
 
 <link rel="icon" href="assets/images/xora-symbol.svg?v=10" type="image/svg+xml">
 <link rel="stylesheet" href="assets/css/common.css?v=10">
-<link rel="stylesheet" href="assets/css/home.css?v=10">
+<link rel="stylesheet" href="assets/css/home.css?v=11">
 </head>
 <body>
 
@@ -57,22 +57,34 @@
       </div>
     </div>
 
-    <ul class="hero__io hero__io--input">
-      <li class="hero__io-title">INPUT</li>
-      <li>顧客データ</li>
-      <li>業務プロセス</li>
-      <li>スプレッドシート</li>
-      <li>メール・問い合わせ</li>
-      <li>手作業・ノウハウ</li>
-    </ul>
-    <ul class="hero__io hero__io--output">
-      <li class="hero__io-title">OUTPUT</li>
-      <li>自動化された業務</li>
-      <li>統合データ基盤</li>
-      <li>Web／AIシステム</li>
-      <li>ダッシュボード</li>
-      <li>継続的な改善</li>
-    </ul>
+  </div>
+</section>
+
+<!-- 2026-08-19 会長指示「これどっかにしまえないの？」でHeroから移設。
+     INPUT/OUTPUTの対はメッセージとして残し、1画面目は手とコピーだけにする。 -->
+<section class="io-strip">
+  <div class="io-strip__inner">
+    <div class="io-strip__col">
+      <p class="io-strip__title io-strip__title--human">INPUT</p>
+      <ul>
+        <li>顧客データ</li>
+        <li>業務プロセス</li>
+        <li>スプレッドシート</li>
+        <li>メール・問い合わせ</li>
+        <li>手作業・ノウハウ</li>
+      </ul>
+    </div>
+    <div class="io-strip__arrow" aria-hidden="true">→</div>
+    <div class="io-strip__col">
+      <p class="io-strip__title io-strip__title--ai">OUTPUT</p>
+      <ul>
+        <li>自動化された業務</li>
+        <li>統合データ基盤</li>
+        <li>Web／AIシステム</li>
+        <li>ダッシュボード</li>
+        <li>継続的な改善</li>
+      </ul>
+    </div>
   </div>
 </section>
 
