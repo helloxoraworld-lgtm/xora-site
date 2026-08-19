@@ -1,0 +1,14 @@
+<svg viewBox="2.1 2.1 30.8 23.8" role="img" aria-label="XORAシンボル" xmlns="http://www.w3.org/2000/svg">
+<!--
+  xora-symbol.svg — favicon / シンボル単体。
+
+  gold/cyan/dotの3要素はxora-logo.svgのシンボル部分と完全に同一のpath d(座標も
+  色も一切変えていない)。viewBoxだけシンボルの左右上下ぎりぎり(ストローク幅ぶんの
+  余白のみ)に詰めてある。座標の測定根拠・2026-08-19の修正内容(dotの色をcyanに訂正
+  した経緯など)はxora-logo.svgのコメント参照。ロゴ本体とfaviconで別の形を使わない
+  という完了条件を守るため、パスの値そのものは二重管理せずxora-logo.svgからそのまま複製している。
+-->
+<path d="M4.00,4.00 C15.33,8.40 15.33,19.60 4.00,24.00" fill="none" stroke="#D9A441" stroke-width="1.9" stroke-linecap="round"/>
+<path d="M31.00,4.00 C19.67,8.40 19.67,19.60 31.00,24.00" fill="none" stroke="#21C7C7" stroke-width="1.9" stroke-linecap="round"/>
+<circle cx="17.00" cy="14.00" r="2.00" fill="#21C7C7"/>
+</svg>

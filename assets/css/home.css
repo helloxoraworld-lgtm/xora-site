@@ -1,0 +1,286 @@
+/*
+  home.css — トップページのHero専用スタイル。共通部分はcommon.cssに寄せてあるのでここは最小限。
+*/
+
+/* v1.2で構図をハイブリッド2カラムから「手を全面背景+コピーを重ねる」1枚絵に変更。
+   ヘッダー(76px)込みで最初の画面が100svhに収まるよう、hero自体はヘッダー分を引いた高さにする
+   (以前はheight:100svhのままだったため、ヘッダー分だけ縦スクロールが発生していた)。 */
+.hero {
+  position: relative;
+  min-height: 684px;
+  height: calc(100svh - var(--header-height));
+  max-height: 974px;
+  background: var(--xora-obsidian);
+  overflow: hidden;
+}
+
+/* ===== 手のビジュアル: Hero全体を覆う背景レイヤー ===== */
+.hero__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* コピーの可読性用グラデーション。手を隠す矩形は置かず、左→中央にだけ薄く効かせる。 */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(3, 8, 15, 0.96) 0%,
+    rgba(3, 8, 15, 0.72) 24%,
+    rgba(3, 8, 15, 0.12) 50%,
+    rgba(3, 8, 15, 0) 68%
+  );
+}
+
+/* コピー・INPUT/OUTPUTなど前面UIをまとめる層。stage/scrimより手前(z-index)に置くための箱で、
+   hero自身のボックスと同じ大きさ(絶対配置の基準)を素の通常フローで確保するだけ。 */
+.hero__inner {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+}
+
+.hero__copy {
+  position: absolute;
+  z-index: 3;
+  left: 4.5vw;
+  top: 46%;
+  transform: translateY(-50%);
+  width: min(460px, 90vw);
+}
+
+.hero__label {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  margin: 0 0 22px;
+  font-weight: 600;
+}
+
+.hero__label .is-human {
+  color: var(--xora-human);
+}
+
+.hero__label .is-sep {
+  color: var(--xora-text-muted);
+}
+
+.hero__label .is-ai {
+  color: var(--xora-ai);
+}
+
+.hero__heading {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(34px, 4.4vw, 52px);
+  line-height: 1.45;
+  color: var(--xora-text-strong);
+  margin: 0 0 22px;
+}
+
+.hero__desc {
+  font-size: 15.5px;
+  line-height: 1.9;
+  color: var(--xora-text-body);
+  max-width: 420px;
+  margin: 0 0 34px;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* ===== 粒子の手ステージの中身(静止画+Canvas) =====
+   位置決め(inset:0で全面を覆う)は上のほうの.hero__stageで定義済み。ここはその中身のfit調整のみ。
+   object-position: center は変更禁止に近い扱い: particle-hands.js のdrawCover()も
+   常に中央クロップとして指先座標(tips)を計算しているため、ここをcenter以外にすると
+   Canvasの脈動光が静止画の指先からズレる。 */
+
+.hero__fallback-img,
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* v5: 局所ソフトマスク。カーソルが手粒子(Layer A)に近づいた分だけ、その周辺だけを
+   円形グラデーションで薄くする(=物理反応する粒子が透けて見える穴を作る)。
+   --hand-mask-min(既定1=マスク無効、通常時は今までと完全に同じ見た目)だけJS側
+   (particle-hands.js のupdateHandMask)が毎フレーム書き換える。半径(r0/r1)は
+   ここでの既定値のまま固定でよい(仕様上、カーソル速度などで動的に変える理由が無いため)。
+   mask-imageはrgba()の「アルファ値」がそのままマスクの通過率になる(既定のmask-mode)ので、
+   グレースケール変換等を挟まずrgba(0,0,0,X)だけで狙った不透明度を作れる。
+   JS無効時・Canvas初期化失敗時・reduced-motion時はJSがこの変数を一切書き換えないため、
+   既定値のまま=マスクは常に無効(今までの静止画と完全に同じ)になる(=保険)。 */
+.hero__fallback-img {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.92;
+  --hand-mask-min: 1;
+  --hand-mask-x: 50%;
+  --hand-mask-y: 50%;
+  --hand-mask-r0: 75px;
+  --hand-mask-r1: 150px;
+  -webkit-mask-image: radial-gradient(
+    circle at var(--hand-mask-x) var(--hand-mask-y),
+    rgba(0, 0, 0, var(--hand-mask-min)) 0,
+    rgba(0, 0, 0, var(--hand-mask-min)) var(--hand-mask-r0),
+    rgba(0, 0, 0, 1) var(--hand-mask-r1)
+  );
+  mask-image: radial-gradient(
+    circle at var(--hand-mask-x) var(--hand-mask-y),
+    rgba(0, 0, 0, var(--hand-mask-min)) 0,
+    rgba(0, 0, 0, var(--hand-mask-min)) var(--hand-mask-r0),
+    rgba(0, 0, 0, 1) var(--hand-mask-r1)
+  );
+}
+
+/* 保険の二重化け: JS側はreduced-motion時に--hand-mask-minを一切書き換えないため
+   本来ここは不要のはずだが、「静止画100%(=マスク常時無効)」はa11y要件として重いので
+   CSS側でも明示的にmask-imageそのものを無効化しておく(将来JS側にバグが入っても
+   このmedia queryだけで安全側に倒れる)。 */
+@media (prefers-reduced-motion: reduce) {
+  .hero__fallback-img {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+.hero__canvas {
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  display: block;
+}
+
+/* JS側でCanvas初期化に成功した時だけ切り替える。
+   失敗時・prefers-reduced-motion時はこのクラスが付かず、静止画のまま = 手が消えない保険。
+
+   v1.1で方針転換: デフォルト(ハイブリッド版)は静止画を主役のまま残し、
+   透過CanvasをUP乗せするだけ。静止画を消すのは ?hands=particles (全粒子版/比較検収用)の時だけ。 */
+.hero__stage.is-canvas-ready .hero__canvas {
+  opacity: 1;
+}
+
+.hero__stage.is-mode-particles.is-canvas-ready .hero__fallback-img {
+  opacity: 0;
+}
+
+/* ===== INPUT / OUTPUT 補助リスト ===== */
+
+.hero__io {
+  position: absolute;
+  z-index: 3;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 12.5px;
+  line-height: 2.05;
+  /* v1.1で調査した「ノウハウ」の末尾が崩れて見えるバグの原因はtext-shadowのボケではなかった。
+     静止画(particle-hands-source.png)自体に明るいボケた光の粒(被写体側のダスト演出)が
+     たまたまその文字の位置に写り込んでおり、半透明の文字色(旧: 86%)だとその輝点が
+     文字の内部まで透けて「別の字形」に見えるほど強く滲んでいた
+     (text-shadowを完全に外しても症状は消えず、これで原因を切り分けた)。
+     直し方: 文字色を不透明にし、四方向+ぼかしの多重text-shadowで輪郭を暗色で
+     完全に縁取る(袋文字に近い処理)。背景がどんな明るさ・色でも文字の可読性が
+     保たれるようにする、という設計に切り替えた。 */
+  color: rgba(243, 240, 232, 1);
+  text-shadow:
+    -1px -1px 1px rgba(3, 8, 15, 1),
+    1px -1px 1px rgba(3, 8, 15, 1),
+    -1px 1px 1px rgba(3, 8, 15, 1),
+    1px 1px 1px rgba(3, 8, 15, 1),
+    0 0 5px rgba(3, 8, 15, 1),
+    0 0 9px rgba(3, 8, 15, 0.9);
+  pointer-events: none;
+}
+
+.hero__io-title {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+/* v1.2でstageがHero全面(=hero__inner)になったため、left/rightの基準幅が
+   旧デザイン(右65%カラムのみ)からHero全体幅に変わった。同じ見た目の位置を保つため、
+   %値を「Hero全体幅に対する割合」に換算し直している(単純な旧値の流用ではない)。
+   INPUTは人間側の手(タッチポイントより左)の上方、OUTPUTはAI側の手の下方に来る位置。 */
+.hero__io--input {
+  top: 6%;
+  left: 39%;
+}
+
+.hero__io--input .hero__io-title {
+  color: var(--xora-human);
+}
+
+.hero__io--output {
+  bottom: 8%;
+  right: 4%;
+  text-align: right;
+}
+
+.hero__io--output .hero__io-title {
+  color: var(--xora-ai);
+}
+
+/* ===== スマホ (900px未満) =====
+   PC版は「手を全面背景+コピーを重ねる」1枚絵だが、375px幅でそのまま縮小すると
+   コピーと手が重なって共倒れになる。今回の修正対象はPCの構図(hero-target.png基準)のみなので、
+   スマホは元の「コピーが先、画像は縦積みの箱」という組版方針を維持する
+   (flexで表示順だけ入れ替え、DOM順はPC版のまま=stageが先)。 */
+@media (max-width: 900px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    padding-bottom: 28px;
+  }
+
+  .hero__stage {
+    position: relative;
+    inset: auto;
+    order: 2;
+    height: 300px;
+    margin: 28px 20px 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* stageが全面背景でなくなるので、左→中央グラデーションは意味を失う。非表示にする。 */
+  .hero__scrim {
+    display: none;
+  }
+
+  .hero__inner {
+    order: 1;
+    height: auto;
+    padding: 28px 20px 0;
+  }
+
+  .hero__copy {
+    position: relative;
+    z-index: 3;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: auto;
+  }
+
+  .hero__desc {
+    max-width: none;
+  }
+
+  /* スマホではINPUT/OUTPUTの補助リストは省略してよい（仕様指定） */
+  .hero__io {
+    display: none;
+  }
+}

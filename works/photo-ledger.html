@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>工事写真台帳メーカー — XORA</title>
+<meta name="description" content="写真フォルダを選ぶだけで、撮影日時順のリネームとExcel写真台帳を自動生成するWindowsアプリ「工事写真台帳メーカー」の制作実績。">
+<link rel="canonical" href="https://helloxoraworld-lgtm.github.io/xora-site/works/photo-ledger.html">
+
+<!-- OGP -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XORA">
+<meta property="og:title" content="工事写真台帳メーカー — XORA">
+<meta property="og:description" content="写真フォルダを選ぶだけで、撮影日時順のリネームとExcel写真台帳を自動生成するWindowsアプリ「工事写真台帳メーカー」の制作実績。">
+<meta property="og:url" content="https://helloxoraworld-lgtm.github.io/xora-site/works/photo-ledger.html">
+<meta property="og:image" content="https://helloxoraworld-lgtm.github.io/xora-site/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="工事写真台帳メーカー — XORA">
+<meta name="twitter:description" content="写真フォルダを選ぶだけで、撮影日時順のリネームとExcel写真台帳を自動生成するWindowsアプリ「工事写真台帳メーカー」の制作実績。">
+<meta name="twitter:image" content="https://helloxoraworld-lgtm.github.io/xora-site/assets/og-image.png">
+
+<link rel="icon" href="../assets/images/xora-symbol.svg?v=10" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/common.css?v=10">
+</head>
+<body>
+
+<header id="site-header" data-base="../" data-active="works"></header>
+
+<main id="main">
+
+  <section class="page-intro">
+    <div class="page-wrap">
+      <a class="back-link" href="../works.html">← 実績一覧に戻る</a>
+      <p class="page-eyebrow"><span class="en">WORKS</span>実績</p>
+      <span class="work-tag">Internal Project</span>
+      <p class="work-status">Windowsアプリ・販売準備中</p>
+      <h1>工事写真台帳メーカー</h1>
+      <p class="page-lead">現場写真の整理とExcel台帳作成に、毎回時間がかかる。その課題から設計した、写真フォルダを選ぶだけで台帳を自動生成するWindowsアプリです。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="page-wrap">
+      <figure class="detail-media">
+        <img src="../assets/images/works/work-photoledger.jpg" alt="工事写真台帳メーカーの表紙イメージ" loading="lazy" width="800" height="800">
+        <figcaption>工事写真台帳メーカーの表紙イメージ(画像内の価格は予定価格です)</figcaption>
+      </figure>
+
+      <dl class="detail-meta">
+        <dt>課題</dt><dd>現場写真の整理とExcel台帳作成に、毎回時間がかかる</dd>
+        <dt>作ったもの</dt><dd>写真フォルダを選ぶだけで、撮影日時順のリネームとExcel写真台帳を自動生成するWindowsアプリ</dd>
+        <dt>担当範囲</dt><dd>要件整理・実装・iPhoneのHEIC写真対応・exe化・動作検証</dd>
+        <dt>使用技術</dt><dd>Python、openpyxl、Pillow(+pillow-heif)、PyInstaller</dd>
+        <dt>工夫</dt><dd>元の写真は変更せずコピー側だけを処理する設計にし、壊れたファイルが1件あっても全体が止まらないようにした</dd>
+        <dt>成果・稼働状況</dt><dd>販売準備中(画像内の価格は予定価格です)</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="page-wrap">
+      <div class="section-head">
+        <h2>処理の流れ</h2>
+        <p>以下は実際のサンプル出力データ(ファイル名・Excelのセル内容)をそのまま使った、処理の流れの説明です。架空の操作画面ではありません。</p>
+      </div>
+
+      <ol class="num-list">
+        <li>
+          <span class="num">01</span>
+          <div>
+            <h3>現場写真フォルダを選ぶ</h3>
+            <p>処理したい現場写真が入ったフォルダを選ぶだけ。それ以外の操作はない。対応形式はJPEG・PNG・HEIC(iPhoneの写真形式)。</p>
+            <ul class="mono-list">
+              <li>現場写真(3枚)</li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <span class="num">02</span>
+          <div>
+            <h3>撮影日時順に自動でリネーム</h3>
+            <p>撮影日時の古い順に並べ替え、コピー側だけを実際にこの形式でリネームする。元の写真ファイルには触れない。</p>
+            <ul class="mono-list">
+              <li>001_20260810_0830.jpg</li>
+              <li>002_20260810_1315.jpg</li>
+              <li>003_20260811_0900.jpg</li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <span class="num">03</span>
+          <div>
+            <h3>サムネイル入りのExcel台帳を自動生成</h3>
+            <p>実際のサンプル出力(写真台帳.xlsx)のセル内容。工事名・場所・内容は生成後にExcel上で書き込める。</p>
+            <table class="data-table">
+              <tr><th>工事写真台帳</th><td>工事名(空欄・後から記入)</td></tr>
+              <tr><th>№1 撮影日時</th><td>2026/08/10 08:30</td></tr>
+              <tr><th>№2 撮影日時</th><td>2026/08/10 13:15</td></tr>
+              <tr><th>№3 撮影日時</th><td>2026/08/11 09:00</td></tr>
+            </table>
+          </div>
+        </li>
+        <li>
+          <span class="num">04</span>
+          <div>
+            <h3>完成ファイルが揃う</h3>
+            <p>元のフォルダは変更せず、「(フォルダ名)_台帳出力」という新しいフォルダにまとめて出力する。</p>
+            <ul class="mono-list">
+              <li>現場写真_台帳出力(写真台帳.xlsx ＋ リネーム済み写真3枚)</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="page-wrap">
+      <p class="page-eyebrow"><span class="en">CONTACT</span>相談</p>
+      <h2>プロジェクトを相談する</h2>
+      <p>同じような「手作業を仕組みに変えたい」という相談を受け付けています。</p>
+      <a class="btn btn-primary btn-lg" href="../contact.html">プロジェクトを相談する <span class="arrow">→</span></a>
+    </div>
+  </section>
+
+</main>
+
+<script src="../assets/js/header.js?v=10"></script>
+</body>
+</html>

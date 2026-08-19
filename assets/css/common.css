@@ -1,0 +1,976 @@
+/*
+  common.css — 全ページ共通のトークン・リセット・ヘッダー・ボタン・簡易ページ用スタイル。
+  外部フォント・外部CDNは使わない。システムフォントのみで組む。
+*/
+
+:root {
+  --xora-human: #D9A441;
+  --xora-human-high: #F3F0E8;
+  --xora-ai: #21C7C7;
+  --xora-ai-high: #72E4DF;
+  --xora-white: #F3F0E8;
+  --xora-obsidian: #03080F;
+
+  /* 本文グレーは白トークンの透明度違いで作る（新しい色を増やさない） */
+  --xora-text-strong: rgba(243, 240, 232, 0.96);
+  --xora-text-body: rgba(243, 240, 232, 0.78);
+  --xora-text-muted: rgba(243, 240, 232, 0.56);
+  --xora-border-faint: rgba(243, 240, 232, 0.16);
+  /* 下層ページのカード・表・罫線区切り用（ヘッダーの罫線より少し強い0.18）。
+     新しい色は増やさず、同じ生成り白の透明度違いで統一する。 */
+  --xora-border: rgba(243, 240, 232, 0.18);
+
+  --font-sans: -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
+  --font-serif: "游明朝", "Yu Mincho", "Hiragino Mincho ProN", serif;
+
+  --header-height: 76px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* iOS Safariでの100svh未対応端末向けフォールバックはJS側では扱わない。CSS単位だけで完結させる。 */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--xora-obsidian);
+  color: var(--xora-text-body);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden; /* 横スクロール絶対防止のための保険。実際の原因はレイアウト側で潰す */
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--xora-ai);
+  outline-offset: 2px;
+}
+
+/* ===== ヘッダー =====
+   トップ(scrollY=0)では黒一色でHeroと継ぎ目なく繋がり、スクロール開始後だけ
+   半透明+ぼかしに切り替える(header.jsがis-scrolledクラスを付け外しする)。
+   高さ(--header-height)はどちらの状態でも変えない(急変させない、が要件)。 */
+
+#site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+  background: var(--xora-obsidian);
+  border-bottom: 1px solid rgba(243, 240, 232, 0.08);
+  transition: background 0.25s ease;
+}
+
+#site-header.is-scrolled {
+  background: rgba(3, 8, 15, 0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* backdrop-filter非対応環境向けの不透明フォールバック */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  #site-header.is-scrolled {
+    background: var(--xora-obsidian);
+  }
+}
+
+.site-header__inner {
+  max-width: 1440px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.site-header__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* 134px(通常PC) / 126px(小型PC、下のmedia queryで上書き) / 120px(スマホ)。
+   widthだけ指定しheight:autoでSVGのアスペクト比(117:28)のまま縮む。
+   2026-08-19 MIKU指示: 「ヘッダー内でロゴだけが主張しすぎる」ため、旧160pxから
+   ナビ・CTAより目立たない125〜140pxの範囲(PC)へ縮小した(ロゴSVG自体は
+   xora-logo.svg側で再測定済み、ここは表示幅のみの調整)。
+   filterは基準画像(assets/references/logo-official.png)の「黒背景で静かに発光して
+   見える」質感をCSSだけで再現するための最小限の追加(SVG自体に発光用の<filter>を
+   焼き込むと favicon 側にも複製が要り二重管理になるため、使用箇所側=CSSに寄せた)。 */
+.site-header__logo img {
+  width: 134px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 5px rgba(243, 240, 232, 0.16));
+}
+
+.site-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-header__nav a {
+  position: relative;
+  font-size: 14.5px;
+  color: var(--xora-text-body);
+  white-space: nowrap;
+  padding: 6px 2px;
+  transition: color 0.2s ease;
+}
+
+/* ホバー/現在地の下線は「左→右へ伸びる」ことを見せるため、
+   transformのscaleXをアニメさせる(width指定のtransitionだとGPU合成が効かずカクつく)。 */
+.site-header__nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--xora-ai);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.22s ease;
+}
+
+.site-header__nav a:hover,
+.site-header__nav a.is-active {
+  color: var(--xora-white);
+}
+
+.site-header__nav a:hover::after,
+.site-header__nav a.is-active::after {
+  transform: scaleX(1);
+}
+
+.site-header__cta {
+  flex-shrink: 0;
+}
+
+.site-header__toggle {
+  display: none;
+}
+
+.site-mobile-menu {
+  display: none;
+}
+
+/* 小型PC(901px〜1150px): ナビとCTAが同居するには余白が足りなくなってくる帯域なので
+   ロゴだけ130pxへ縮める(ナビ・CTA自体は縮めない=タップ/クリック領域を維持)。 */
+@media (min-width: 901px) and (max-width: 1150px) {
+  .site-header__logo img {
+    width: 126px;
+  }
+  .site-header__nav {
+    gap: 20px;
+  }
+}
+
+/* ===== スマホ(900px未満): ロゴ+ハンバーガーのみの2要素構成 ===== */
+@media (max-width: 900px) {
+  .site-header__inner {
+    padding: 0 18px;
+  }
+  .site-header__logo img {
+    width: 120px; /* 2026-08-19: 112〜128pxの目安内、ハンバーガーと干渉しない値へ調整 */
+  }
+  .site-header__nav,
+  .site-header__cta {
+    display: none;
+  }
+
+  .site-header__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    flex-shrink: 0;
+  }
+
+  .site-header__toggle-bars,
+  .site-header__toggle-bars::before,
+  .site-header__toggle-bars::after {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--xora-white);
+    border-radius: 1px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .site-header__toggle-bars {
+    position: relative;
+  }
+
+  .site-header__toggle-bars::before,
+  .site-header__toggle-bars::after {
+    content: "";
+    position: absolute;
+    left: 0;
+  }
+
+  .site-header__toggle-bars::before {
+    top: -7px;
+  }
+
+  .site-header__toggle-bars::after {
+    top: 7px;
+  }
+
+  /* 開状態: ×字に変形。JS側はaria-expanded/hidden属性の切替のみ担当し、
+     見た目の変形はCSSの属性セレクタに任せる(状態を持つ場所を1つに絞る)。 */
+  .site-header__toggle[aria-expanded="true"] .site-header__toggle-bars {
+    background: transparent;
+  }
+  .site-header__toggle[aria-expanded="true"] .site-header__toggle-bars::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+  .site-header__toggle[aria-expanded="true"] .site-header__toggle-bars::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+
+  .site-mobile-menu {
+    display: block;
+    position: fixed;
+    inset: var(--header-height) 0 0 0;
+    z-index: 99;
+    background: var(--xora-obsidian);
+    padding: 36px 24px;
+    overflow-y: auto;
+  }
+
+  .site-mobile-menu[hidden] {
+    display: none;
+  }
+
+  .site-mobile-menu__nav {
+    list-style: none;
+    margin: 0 0 32px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .site-mobile-menu__nav a {
+    display: block;
+    padding: 16px 4px;
+    font-size: 19px;
+    color: var(--xora-text-strong);
+    border-bottom: 1px solid var(--xora-border-faint);
+  }
+
+  .site-mobile-menu__nav a.is-active {
+    color: var(--xora-ai);
+  }
+
+  .site-mobile-menu__cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* メニュー展開中は背景(bodyのスクロール)を止める。ヘッダー自体はposition:stickyのため
+   このクラスが無くてもヘッダーは動かないが、メニューの下に隠れた本文が動くのを防ぐ。 */
+body.is-menu-open {
+  overflow: hidden;
+}
+
+/* ===== ボタン ===== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 22px;
+  font-size: 14.5px;
+  border-radius: 4px;
+  border: 1px solid var(--xora-border-faint);
+  color: var(--xora-white);
+  background: transparent;
+  white-space: nowrap;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  border-color: rgba(33, 199, 199, 0.55);
+}
+
+.btn-primary:hover {
+  border-color: var(--xora-ai);
+  background: rgba(33, 199, 199, 0.08);
+}
+
+.btn-secondary {
+  border-color: var(--xora-border-faint);
+}
+
+.btn-secondary:hover {
+  border-color: rgba(243, 240, 232, 0.4);
+  background: rgba(243, 240, 232, 0.04);
+}
+
+.btn .arrow {
+  transition: transform 0.2s ease;
+}
+
+.btn:hover .arrow {
+  transform: translateX(3px);
+}
+
+/* 下層ページの末尾CTA・お問い合わせページの主ボタンなど、少し大きく見せたい箇所専用。 */
+.btn-lg {
+  padding: 16px 28px;
+  font-size: 15.5px;
+}
+
+/* ===== 下層ページ共通レイアウト =====
+   2026-08-19、黒曜石版の下層9ページ(services/works/strengths/process/pricing/contact +
+   works配下3件)に本文を実装した回で新設。第一段階のプレースホルダー(.page-simple、
+   「内容は準備中です」の1行だけを880px幅の中央寄せで表示する暫定クラス)は
+   全9ページの本文が揃ったことで使用箇所がゼロになったため、ここで丸ごと置き換えた
+   （中途半端に両方残すと「どっちを直せばいいのか」の判断コストが増えるため）。
+
+   角丸はボタンの4px(既存の.btn)のみ。カード・表・罫線区切りはすべて
+   1px solid var(--xora-border)（生成り白18%）+ 余白で表現し、新しい飾りは足さない。
+   金(--xora-human)は「人間側」、シアン(--xora-ai)は「AI側」の意味を保つため、
+   下層ページでは見出しラベル・CTA・数値強調にシアンだけを使う(金はHeroの人間の手/
+   INPUTラベル専用のまま、下層では使わない)。 */
+
+.page-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 各ページ先頭の eyebrow + h1 + リード文。 */
+.page-intro {
+  padding: 88px 0 56px;
+}
+
+@media (max-width: 640px) {
+  .page-intro {
+    padding: 64px 0 40px;
+  }
+}
+
+.page-eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--xora-ai);
+  margin: 0 0 16px;
+}
+
+.page-eyebrow .en {
+  opacity: 0.7;
+  margin-right: 0.6em;
+}
+
+.page-intro h1 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(30px, 4.2vw, 46px);
+  color: var(--xora-text-strong);
+  margin: 0 0 22px;
+  line-height: 1.5;
+}
+
+.page-lead {
+  font-size: 16px;
+  line-height: 1.9;
+  color: var(--xora-text-body);
+  max-width: 640px;
+  margin: 0;
+}
+
+/* 本文を並べる汎用セクション。上に罫線を引いて区切るだけで、背景色は変えない
+   (黒曜石の背景を貫通させる方針。白サイトのbg-soft相当の段差は下層では作らない)。 */
+.section {
+  padding: 56px 0;
+  border-top: 1px solid var(--xora-border-faint);
+}
+
+.page-intro + .section {
+  border-top: none;
+  padding-top: 0;
+}
+
+.section-head {
+  margin: 0 0 36px;
+}
+
+.section-head.is-center {
+  text-align: center;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section h2 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(22px, 2.6vw, 30px);
+  color: var(--xora-text-strong);
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+
+.section h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--xora-text-strong);
+  margin: 0 0 10px;
+  line-height: 1.6;
+}
+
+.section p {
+  margin: 0 0 20px;
+  color: var(--xora-text-body);
+}
+
+.section p:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== カードグリッド(サービス3入口・強み3項目など) ===== */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--xora-border);
+  border-left: 1px solid var(--xora-border);
+}
+
+.card {
+  padding: 30px 26px;
+  border-right: 1px solid var(--xora-border);
+  border-bottom: 1px solid var(--xora-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.card__media {
+  aspect-ratio: 4 / 3;
+  margin: -30px -26px 22px;
+  overflow: hidden;
+  background: rgba(243, 240, 232, 0.03);
+}
+
+.card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-num {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  color: var(--xora-ai);
+  opacity: 0.6;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.card h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 18.5px;
+  color: var(--xora-text-strong);
+  margin: 0 0 14px;
+  line-height: 1.55;
+}
+
+.card-meta {
+  margin: 0 0 22px;
+  flex: 1;
+}
+
+.card-meta dt {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--xora-text-muted);
+  margin-top: 14px;
+}
+
+.card-meta dt:first-child {
+  margin-top: 0;
+}
+
+.card-meta dd {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--xora-text-body);
+}
+
+.card-evidence {
+  font-size: 13px;
+  color: var(--xora-text-muted);
+  border-top: 1px dashed var(--xora-border-faint);
+  padding-top: 12px;
+  margin: 0;
+}
+
+.card-foot {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-foot .btn {
+  justify-content: center;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  color: var(--xora-ai);
+  border-bottom: 1px solid rgba(33, 199, 199, 0.4);
+  padding-bottom: 2px;
+  width: max-content;
+}
+
+.text-link:hover {
+  border-color: var(--xora-ai);
+}
+
+@media (max-width: 860px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== 数字の実測値(強み) ===== */
+
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 880px;
+  margin: 0 0 44px;
+  text-align: center;
+}
+
+.stat-strip__num {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: clamp(30px, 4vw, 42px);
+  color: var(--xora-ai);
+  line-height: 1;
+}
+
+.stat-strip__label {
+  font-size: 13px;
+  color: var(--xora-text-muted);
+  margin-top: 10px;
+}
+
+@media (max-width: 700px) {
+  .stat-strip {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* ===== 番号つきリスト(制作の流れ・ステップ実演) ===== */
+
+.num-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 820px;
+}
+
+.num-list > li {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 18px;
+  padding: 26px 0;
+  border-top: 1px solid var(--xora-border-faint);
+}
+
+.num-list > li:last-child {
+  border-bottom: 1px solid var(--xora-border-faint);
+}
+
+.num-list .num {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  color: var(--xora-ai);
+}
+
+.num-list h3 {
+  margin-bottom: 10px;
+}
+
+.num-list p {
+  margin: 0 0 10px;
+}
+
+.role-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 28px;
+  margin-top: 12px;
+}
+
+.role {
+  border-left: 2px solid var(--xora-border-faint);
+  padding-left: 14px;
+}
+
+.role-label {
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: 0.05em;
+  color: var(--xora-text-muted);
+  margin-bottom: 5px;
+}
+
+.role p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--xora-text-body);
+}
+
+@media (max-width: 600px) {
+  .role-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== ダッシュ付き簡易リスト(問い合わせ時に書いてほしいこと 等) ===== */
+
+.dash-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dash-list li {
+  position: relative;
+  padding: 9px 0 9px 20px;
+  font-size: 14.5px;
+  color: var(--xora-text-body);
+}
+
+.dash-list li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--xora-ai);
+}
+
+/* ===== 料金 ===== */
+
+.price-list {
+  max-width: 820px;
+}
+
+.price-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px 20px;
+  padding: 22px 0;
+  border-top: 1px solid var(--xora-border-faint);
+}
+
+.price-row:last-of-type {
+  border-bottom: 1px solid var(--xora-border-faint);
+}
+
+.price-row h3 {
+  margin: 0;
+  flex: 1 1 200px;
+  font-size: 16.5px;
+}
+
+.price-value {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  color: var(--xora-ai);
+  margin: 0;
+}
+
+.price-note {
+  width: 100%;
+  font-size: 13.5px;
+  color: var(--xora-text-muted);
+  margin: 0;
+}
+
+/* ===== 実績一覧(works.html): 画像つきカード ===== */
+
+.work-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--xora-border);
+  border-left: 1px solid var(--xora-border);
+}
+
+.work-card {
+  border-right: 1px solid var(--xora-border);
+  border-bottom: 1px solid var(--xora-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.work-card__media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: rgba(243, 240, 232, 0.03);
+}
+
+.work-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.work-card__body {
+  padding: 24px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.work-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--xora-ai);
+  border: 1px solid rgba(33, 199, 199, 0.5);
+  padding: 3px 9px;
+  margin-bottom: 12px;
+  width: max-content;
+}
+
+.work-status {
+  font-size: 12px;
+  color: var(--xora-text-muted);
+  margin: 0 0 10px;
+}
+
+.work-card__body h3 {
+  margin-bottom: 12px;
+}
+
+.work-card__body p {
+  font-size: 13.5px;
+  margin: 0 0 18px;
+}
+
+.work-card__body .text-link {
+  margin-top: auto;
+}
+
+@media (max-width: 860px) {
+  .work-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== 実績詳細ページ(works/配下): 画像・動画 + 事実の定義リスト ===== */
+
+.detail-media {
+  border: 1px solid var(--xora-border);
+  margin-bottom: 40px;
+  overflow: hidden;
+  background: rgba(243, 240, 232, 0.03);
+}
+
+.detail-media img,
+.detail-media video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.detail-media figcaption {
+  padding: 10px 16px;
+  font-size: 12.5px;
+  color: var(--xora-text-muted);
+  border-top: 1px solid var(--xora-border-faint);
+}
+
+/* X Strikersのループ映像は縦動画(スマホ実機キャプチャ)のため、横幅いっぱいに
+   広げると縦に間延びする。実際の素材比率(420:746)に近い最大幅で中央寄せする。 */
+.detail-media--video {
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.detail-meta {
+  display: grid;
+  grid-template-columns: 148px 1fr;
+  gap: 16px 24px;
+  margin: 30px 0 0;
+  padding-top: 30px;
+  border-top: 1px solid var(--xora-border-faint);
+  max-width: 780px;
+}
+
+.detail-meta dt {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--xora-text-muted);
+  padding-top: 2px;
+}
+
+.detail-meta dd {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--xora-text-body);
+}
+
+@media (max-width: 640px) {
+  .detail-meta {
+    grid-template-columns: 1fr;
+    gap: 6px 0;
+  }
+  .detail-meta dt {
+    margin-top: 16px;
+  }
+  .detail-meta dt:first-child {
+    margin-top: 0;
+  }
+}
+
+/* 工事写真台帳メーカーの実データ表示(モノスペースのファイル名リスト・サンプル表)。
+   架空の操作画面は作らず、実際のサンプル出力の文字列だけをそのまま載せる。 */
+.mono-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 13px;
+}
+
+.mono-list li {
+  padding: 8px 12px;
+  border: 1px solid var(--xora-border-faint);
+  border-top: none;
+  color: var(--xora-text-body);
+}
+
+.mono-list li:first-child {
+  border-top: 1px solid var(--xora-border-faint);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+  font-size: 13px;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid var(--xora-border-faint);
+  padding: 9px 12px;
+  text-align: left;
+  font-weight: 400;
+  color: var(--xora-text-body);
+}
+
+.data-table th {
+  background: rgba(243, 240, 232, 0.04);
+  font-weight: 600;
+  color: var(--xora-text-strong);
+  width: 34%;
+}
+
+/* 補足の小さな注記(正式価格表は準備中です、等)。段落1つのために専用クラスを
+   都度作らず、この汎用クラスで済ませる。 */
+.note {
+  margin-top: 32px;
+  max-width: 640px;
+  font-size: 14px;
+  color: var(--xora-text-muted);
+}
+
+/* ===== 末尾の共通CTA(相談へ誘導。contact.html自身には置かない) ===== */
+
+.cta-band {
+  border-top: 1px solid var(--xora-border-faint);
+  padding: 76px 0 100px;
+  text-align: center;
+}
+
+.cta-band .page-eyebrow {
+  justify-content: center;
+}
+
+.cta-band h2 {
+  margin: 0 0 16px;
+}
+
+.cta-band p {
+  max-width: 520px;
+  margin: 0 auto 30px;
+}
+
+/* ===== ページ内の簡易「戻る」リンク(実績詳細→実績一覧など) ===== */
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--xora-text-muted);
+  border-bottom: 1px solid var(--xora-border-faint);
+  padding-bottom: 2px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  margin-bottom: 40px;
+}
+
+.back-link:hover {
+  color: var(--xora-white);
+  border-color: var(--xora-white);
+}

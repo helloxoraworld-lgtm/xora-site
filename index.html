@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XORA — 人の想いを、動く仕組みに。</title>
+<meta name="description" content="Web、AI、自動化を組み合わせ、散らばった情報と手作業を、実際に運用できるシステムへ変えます。">
+<link rel="canonical" href="https://helloxoraworld-lgtm.github.io/xora-site/">
+
+<!-- OGP -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XORA">
+<meta property="og:title" content="XORA — 人の想いを、動く仕組みに。">
+<meta property="og:description" content="Web、AI、自動化を組み合わせ、散らばった情報と手作業を、実際に運用できるシステムへ変えます。">
+<meta property="og:url" content="https://helloxoraworld-lgtm.github.io/xora-site/">
+<meta property="og:image" content="https://helloxoraworld-lgtm.github.io/xora-site/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="XORA — 人の想いを、動く仕組みに。">
+<meta name="twitter:description" content="Web、AI、自動化を組み合わせ、散らばった情報と手作業を、実際に運用できるシステムへ変えます。">
+<meta name="twitter:image" content="https://helloxoraworld-lgtm.github.io/xora-site/assets/og-image.png">
+
+<link rel="icon" href="assets/images/xora-symbol.svg?v=10" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/common.css?v=10">
+<link rel="stylesheet" href="assets/css/home.css?v=10">
+</head>
+<body>
+
+<header id="site-header" data-base="./" data-active="home"></header>
+
+<section class="hero">
+  <!-- 手のビジュアルはHero全体を覆う背景レイヤー(position:absolute; inset:0)。
+       particle-hands.jsは常にこの.hero__stage自身のgetBoundingClientRect()を基準に
+       静止画・Canvasの座標を計算するため、ここを全面レイヤーにするだけで
+       脈動光・アンビエント粒子の座標も自動的に新しい表示サイズへ追従する(JS側は無改修)。 -->
+  <div class="hero__stage">
+    <!-- JS無効時・Canvas初期化失敗時・prefers-reduced-motion時はこの静止画のまま表示される -->
+    <img class="hero__fallback-img" src="assets/references/particle-hands-source.png" alt="人の手とAIの手が触れ合う粒子のイメージ" width="1729" height="910">
+    <canvas class="hero__canvas" aria-hidden="true"></canvas>
+  </div>
+
+  <!-- コピーの可読性確保のための左→中央グラデーション。手を隠す矩形は置かない(仕様指定)。 -->
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="hero__inner">
+    <div class="hero__copy">
+      <p class="hero__label">
+        <span class="is-human">HUMAN INTENT</span><span class="is-sep"> × </span><span class="is-ai">ARTIFICIAL INTELLIGENCE</span>
+      </p>
+      <h1 class="hero__heading">人の想いを、<br>動く仕組みに。</h1>
+      <p class="hero__desc">Web、AI、自動化を組み合わせ、散らばった情報と手作業を、実際に運用できるシステムへ変えます。</p>
+      <div class="hero__actions">
+        <a class="btn btn-primary" href="contact.html">プロジェクトを相談する <span class="arrow">→</span></a>
+        <a class="btn btn-secondary" href="works.html">実績を見る <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <ul class="hero__io hero__io--input">
+      <li class="hero__io-title">INPUT</li>
+      <li>顧客データ</li>
+      <li>業務プロセス</li>
+      <li>スプレッドシート</li>
+      <li>メール・問い合わせ</li>
+      <li>手作業・ノウハウ</li>
+    </ul>
+    <ul class="hero__io hero__io--output">
+      <li class="hero__io-title">OUTPUT</li>
+      <li>自動化された業務</li>
+      <li>統合データ基盤</li>
+      <li>Web／AIシステム</li>
+      <li>ダッシュボード</li>
+      <li>継続的な改善</li>
+    </ul>
+  </div>
+</section>
+
+<script src="assets/js/header.js?v=10"></script>
+<!-- hand-particles-data.js はbuild_hand_particles.pyが生成する自動生成ファイル。
+     particle-hands.jsより先に(同期scriptとして)読み込むことで、DOMContentLoaded時点で
+     window.__XORA_HAND_PARTICLES__ が既に使える状態にしている(非同期の画像読み込み待ちをなくすため)。 -->
+<script src="assets/js/hand-particles-data.js?v=10"></script>
+<script src="assets/js/particle-hands.js?v=10"></script>
+</body>
+</html>

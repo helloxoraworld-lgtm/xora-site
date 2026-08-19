@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Web制作 — XORA</title>
+<meta name="description" content="このXORA公式サイト自体と、クラウドソーシング応募用に制作したデザインサンプル。設計からアクセシビリティ検証まで一人で担当したWeb制作の実績。">
+<link rel="canonical" href="https://helloxoraworld-lgtm.github.io/xora-site/works/web-production.html">
+
+<!-- OGP -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XORA">
+<meta property="og:title" content="Web制作 — XORA">
+<meta property="og:description" content="このXORA公式サイト自体と、クラウドソーシング応募用に制作したデザインサンプル。設計からアクセシビリティ検証まで一人で担当したWeb制作の実績。">
+<meta property="og:url" content="https://helloxoraworld-lgtm.github.io/xora-site/works/web-production.html">
+<meta property="og:image" content="https://helloxoraworld-lgtm.github.io/xora-site/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Web制作 — XORA">
+<meta name="twitter:description" content="このXORA公式サイト自体と、クラウドソーシング応募用に制作したデザインサンプル。設計からアクセシビリティ検証まで一人で担当したWeb制作の実績。">
+<meta name="twitter:image" content="https://helloxoraworld-lgtm.github.io/xora-site/assets/og-image.png">
+
+<link rel="icon" href="../assets/images/xora-symbol.svg?v=10" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/common.css?v=10">
+</head>
+<body>
+
+<header id="site-header" data-base="../" data-active="works"></header>
+
+<main id="main">
+
+  <section class="page-intro">
+    <div class="page-wrap">
+      <a class="back-link" href="../works.html">← 実績一覧に戻る</a>
+      <p class="page-eyebrow"><span class="en">WORKS</span>実績</p>
+      <h1>Web制作</h1>
+      <p class="page-lead">設計・デザイン・実装・検証までを分断せず一人で担当します。ここでは実例として、このXORA公式サイト自体と、クラウドソーシングの案件応募用に制作したデザインサンプルの2件を紹介します。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="page-wrap">
+      <span class="work-tag">Internal Project</span>
+      <p class="work-status">Webサイト・公開中</p>
+      <h2>XORA公式サイト(このサイト)</h2>
+
+      <figure class="detail-media">
+        <img src="../assets/images/works/work-xora-site.jpg" alt="XORA公式サイトのトップページ" loading="lazy" width="1400" height="1050">
+        <figcaption>このサイトのトップページを実際に撮影したスクリーンショット</figcaption>
+      </figure>
+
+      <dl class="detail-meta">
+        <dt>課題</dt><dd>会社の実績・強み・進め方を体系立てて伝える場所が無く、案件応募のたびに実績を示す手段が限られていた</dd>
+        <dt>作ったもの</dt><dd>黒曜石(#03080F)を背景に、金=人間・シアン=AIの配色で「人の想いを、動く仕組みに。」という方針を伝える公式サイト一式(トップ+下層9ページ)</dd>
+        <dt>担当範囲</dt><dd>配色・タイポグラフィの設計、Hero部分のCanvas粒子表現、共通ヘッダーのコンポーネント化、レスポンシブ対応、Playwrightによる自動検証まで単独で実施</dd>
+        <dt>使用技術</dt><dd>静的HTML / CSS / vanilla JS(外部フレームワーク不使用)。HeroはCanvasで人間側とAI側の手が触れ合う粒子表現を描画。共通ヘッダーは1つのJSファイル(header.js)から全ページへ注入する構成</dd>
+        <dt>工夫</dt><dd>粒子アニメーションはprefers-reduced-motion(視差やアニメを抑えたい設定)に対応させ、Canvas初期化に失敗した場合や画像読み込みに失敗した場合は静止画へ自動でフォールバックするようにした</dd>
+        <dt>成果・稼働状況</dt><dd>制作中。このページを含むサイト全体がその実例です</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="page-wrap">
+      <span class="work-tag">Concept Project</span>
+      <p class="work-status">Webデザインサンプル・架空サービス</p>
+      <h2>片付け・遺品整理サービスのTOPページ「まっさら整理サポート」</h2>
+
+      <figure class="detail-media">
+        <img src="../assets/images/works/work-sample.jpg" alt="Webデザインサンプル「まっさら整理サポート」のトップページ" loading="lazy" width="960" height="600">
+        <figcaption>架空サービスのデザインサンプルです。実在の企業・サービスではありません</figcaption>
+      </figure>
+
+      <dl class="detail-meta">
+        <dt>課題</dt><dd>クラウドソーシング案件への応募で、業態に合わせたデザイン力を示す必要があった</dd>
+        <dt>作ったもの</dt><dd>片付け・遺品整理サービスの架空TOPページ</dd>
+        <dt>担当範囲</dt><dd>デザイン・実装・アクセシビリティ検証まで単独で実施</dd>
+        <dt>使用技術</dt><dd>静的HTML / CSS / vanilla JS(外部依存ゼロ)</dd>
+        <dt>工夫</dt><dd>コントラスト比・レイアウト崩れ・動作をすべて自動検証してから提出した</dd>
+        <dt>成果・稼働状況</dt><dd>架空サービスのデザインサンプルです。実在の企業・サービスではありません</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="page-wrap">
+      <p class="page-eyebrow"><span class="en">CONTACT</span>相談</p>
+      <h2>プロジェクトを相談する</h2>
+      <p>サイトが無い、または古いデザインのまま更新できていない。そんな状態からで構いません。</p>
+      <a class="btn btn-primary btn-lg" href="../contact.html">プロジェクトを相談する <span class="arrow">→</span></a>
+    </div>
+  </section>
+
+</main>
+
+<script src="../assets/js/header.js?v=10"></script>
+</body>
+</html>
