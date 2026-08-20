@@ -67,8 +67,11 @@
           </dl>
           <div class="card-foot">
             <a class="btn btn-primary" href="contact.html">プロジェクトを相談する <span class="arrow">→</span></a>
-            <a class="text-link" href="demo/csv-merge.html">その場で動くデモを試す</a>
-            <a class="text-link" href="works/photo-ledger.html">関連実績を見る</a>
+            <!-- リンク2本は横並びにする。縦に積むとこのカードだけ相談ボタンの位置が上にずれ、3枚のカードで高さが揃わなくなる -->
+            <div style="display:flex;gap:16px;flex-wrap:wrap">
+              <a class="text-link" href="demo/csv-merge.html">その場で動くデモを試す</a>
+              <a class="text-link" href="works/photo-ledger.html">関連実績を見る</a>
+            </div>
           </div>
         </div>
 
