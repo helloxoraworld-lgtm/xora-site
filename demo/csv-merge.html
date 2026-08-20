@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="列名も日付の書き方も違う複数のCSVを、1枚の集計表にまとめる様子をその場で試せるデモです。Excelの手作業を自動化する実例として、XORAが公開しています。">
+<link rel="canonical" href="https://helloxoraworld-lgtm.github.io/xora-site/demo/csv-merge.html">
+<title>バラバラのCSVを1枚の集計表にする（動くデモ）｜XORA</title>
+<style>
+/* ===================================================================
+   このファイルについて（会長向けメモ）:
+   「Excel/スプレッドシートの手作業を自動化できる方」系の案件に添える
+   汎用デモ。案件ごとに作り直さず、これ1本を提案の添付にする想定。
+
+   守っている前提:
+   ・外部CDN・外部フォント・fetch を一切使わない。会長も発注者も file:// で
+     直接開くため、通信が絡んだ時点で無言で死ぬ（2026-08-18の教訓）。
+     サンプルデータもこのファイル内にJSで持っている。
+   ・開いた瞬間に「3ファイル読み込み済み・集計済み」の状態で表示する
+     （デモ品質ルール14・17。空の枠は機能が無いのと同じに見える）。
+
+   配色の理由:
+   ・業務データを長時間見る画面なので、低彩度のスレート(#f6f8f9〜#233038)を地にして
+     目の負担を下げる。
+   ・アクセントはティール(#0d6e66)の1色だけ。「いま処理された/合計はここ」を
+     示す色をページ内で1つに絞る。
+   ・橙(#b1500f)は警告（スキップした行）専用。良い/悪いを色で即断できるようにする。
+   ・文字色はすべて白背景に対しコントラスト比4.5:1以上を確保した濃さで指定。
+=================================================================== */
+:root{
+  --bg:#f6f8f9;
+  --panel:#ffffff;
+  --ink:#233038;
+  --ink-soft:#4d626d;
+  --line:#dbe4e8;
+  --brand:#0d6e66;
+  --brand-dark:#095852;
+  --brand-soft:#e6f3f1;
+  --warn:#b1500f;
+  --warn-soft:#fdf0e4;
+  --radius:14px;
+  --shadow:0 8px 24px rgba(35,48,56,.08);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"游ゴシック体","Yu Gothic Medium","Yu Gothic","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;
+  font-size:16px;
+  line-height:1.7;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 64px;}
+header h1{font-size:clamp(22px,3vw,30px);margin:0 0 6px;letter-spacing:.01em;}
+header p.lead{margin:0 0 4px;color:var(--ink-soft);}
+.badge{display:inline-block;background:var(--brand-soft);color:var(--brand-dark);
+  font-size:13px;font-weight:700;padding:3px 10px;border-radius:999px;margin-bottom:10px;}
+
+.grid{display:grid;gap:16px;grid-template-columns:1fr 1fr;margin-top:20px;}
+@media (max-width:820px){ .grid{grid-template-columns:1fr;} }
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px 18px 16px;box-shadow:var(--shadow);animation:rise .38s ease both;}
+.panel h2{font-size:17px;margin:0 0 12px;display:flex;align-items:center;gap:8px;}
+.panel h2 .n{background:var(--brand);color:#fff;width:24px;height:24px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex:none;}
+@keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.panel:nth-child(2){animation-delay:.06s;}
+
+/* 取り込んだファイル */
+.files{display:flex;flex-direction:column;gap:8px;margin:0 0 12px;}
+.file{display:flex;align-items:center;gap:10px;border:1px solid var(--line);
+  border-radius:10px;padding:9px 12px;background:#fbfdfd;}
+.file .name{font-weight:700;font-size:14px;}
+.file .meta{margin-left:auto;font-size:13px;color:var(--ink-soft);}
+.file .dot{width:9px;height:9px;border-radius:50%;background:var(--brand);flex:none;}
+.file.skip .dot{background:var(--warn);}
+
+.drop{border:2px dashed var(--line);border-radius:12px;padding:16px;text-align:center;
+  color:var(--ink-soft);font-size:14px;transition:border-color .2s,background .2s;}
+.drop.on{border-color:var(--brand);background:var(--brand-soft);}
+.drop b{color:var(--ink);}
+
+/* ログ */
+.log{font-size:13.5px;margin:0;padding:0;list-style:none;max-height:340px;overflow:auto;}
+.log li{padding:6px 0;border-bottom:1px dashed var(--line);display:flex;gap:8px;}
+.log li:last-child{border-bottom:none;}
+.log .tag{flex:none;font-weight:700;font-size:11.5px;padding:1px 7px;border-radius:5px;
+  background:var(--brand-soft);color:var(--brand-dark);height:fit-content;margin-top:2px;}
+.log .tag.w{background:var(--warn-soft);color:var(--warn);}
+
+/* 集計表 */
+.tablewrap{overflow-x:auto;margin-top:4px;}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:420px;}
+th,td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:right;white-space:nowrap;}
+th:first-child,td:first-child{text-align:left;}
+thead th{background:#eef3f4;font-size:13px;color:var(--ink-soft);border-bottom:2px solid var(--line);}
+tbody tr:hover{background:#f9fcfc;}
+tfoot td{font-weight:700;background:var(--brand-soft);color:var(--brand-dark);border-bottom:none;}
+
+/* カテゴリ内訳バー */
+.bars{margin-top:16px;}
+.bar{margin-bottom:10px;}
+.bar .lbl{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:3px;}
+.bar .track{height:9px;background:#eef3f4;border-radius:999px;overflow:hidden;}
+.bar .fill{height:100%;background:var(--brand);border-radius:999px;width:0;
+  transition:width .7s cubic-bezier(.2,.7,.3,1);}
+
+/* ボタン */
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+button{font:inherit;font-weight:700;border-radius:10px;padding:0 18px;min-height:44px;
+  border:1px solid var(--brand);background:var(--brand);color:#fff;cursor:pointer;
+  transition:transform .08s,background .2s;}
+button.ghost{background:#fff;color:var(--brand-dark);}
+button:hover{background:var(--brand-dark);}
+button.ghost:hover{background:var(--brand-soft);}
+button:active{transform:translateY(1px);}
+button:focus-visible{outline:3px solid #7fc9c1;outline-offset:2px;}
+
+.note{font-size:13.5px;color:var(--ink-soft);margin-top:10px;}
+details{margin-top:24px;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius);padding:12px 16px;}
+summary{cursor:pointer;font-weight:700;font-size:14.5px;}
+details p{font-size:14px;color:var(--ink-soft);}
+footer{margin-top:28px;font-size:13px;color:var(--ink-soft);text-align:center;}
+.kpi{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0 2px;}
+.kpi div{background:var(--brand-soft);border-radius:10px;padding:10px 14px;}
+.kpi b{display:block;font-size:20px;color:var(--brand-dark);line-height:1.3;}
+.kpi span{font-size:12.5px;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="badge">業務自動化デモ・その場で動きます</div>
+  <h1>バラバラのCSVを、1枚の集計表にする</h1>
+  <p class="lead">列名も日付の書き方も金額の書き方も違う3店舗のファイルを、手を触れずに1つへ。<br>
+  下は<b>すでに3ファイルを取り込んで集計し終わった状態</b>です。ご自身のCSVを放り込むと差し替わります。</p>
+</header>
+
+<div class="kpi">
+  <div><b id="kFiles">3</b><span>取り込んだファイル</span></div>
+  <div><b id="kRows">0</b><span>集計した明細</span></div>
+  <div><b id="kSkip">0</b><span>集計から除いた行</span></div>
+  <div><b id="kSum">0</b><span>売上合計（円）</span></div>
+</div>
+
+<div class="grid">
+  <section class="panel">
+    <h2><span class="n">1</span>取り込んだファイル</h2>
+    <div class="files" id="files"></div>
+    <div class="drop" id="drop">
+      <b>ここにCSVをドラッグ＆ドロップ</b><br>
+      または <button class="ghost" type="button" id="pick" style="margin-top:8px">ファイルを選ぶ</button>
+      <input type="file" id="input" accept=".csv,text/csv" multiple hidden>
+      <div class="note" style="margin-top:8px">列名が違っても構いません。日付・金額・区分の列を自動で見つけます。</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2><span class="n">2</span>何をどう解釈したか</h2>
+    <ul class="log" id="log"></ul>
+    <p class="note">※ 自動処理を「勝手にやった」で終わらせず、判断の根拠を全部出します。ここが実務では一番揉めるところです。</p>
+  </section>
+</div>
+
+<section class="panel" style="margin-top:16px">
+  <h2><span class="n">3</span>集計結果（店舗 × 月）</h2>
+  <div class="tablewrap">
+    <table id="tbl">
+      <thead></thead><tbody></tbody><tfoot></tfoot>
+    </table>
+  </div>
+
+  <div class="bars" id="bars"></div>
+
+  <div class="btnrow">
+    <button type="button" id="dl">この集計表をCSVで保存（Excelでそのまま開けます）</button>
+    <button type="button" class="ghost" id="reset">サンプルに戻す</button>
+  </div>
+  <p class="note">保存するCSVはBOM付きUTF-8です。Excelでダブルクリックしても日本語が化けません。</p>
+</section>
+
+<details>
+  <summary>このデモの技術的な前提（クリックで開きます）</summary>
+  <p>
+  ・通信は一切していません。ブラウザの中だけで処理しており、放り込んだファイルはどこにも送信されません（社内データでそのまま試せます）。<br>
+  ・この画面は列名の自動判定・日付形式の吸収・表記ゆれの統合・合計行の除外までを実演するためのものです。実案件では、対象がGoogleスプレッドシートなら Apps Script、社内の共有フォルダに毎日届くファイルなら Python の常駐処理、と置き場所に合わせて実装します（毎朝の自動実行まで含めて、当方は自社業務で16本を毎日動かしています）。<br>
+  ・扱う値が個人情報・機微情報を含む場合は、保存先と保持期間を先に決めてから着手します。
+  </p>
+</details>
+
+<section class="panel" style="margin-top:22px;text-align:center">
+  <h2 style="justify-content:center">同じような手作業、自動化できます</h2>
+  <p style="max-width:640px;margin:0 auto 16px;color:var(--ink-soft);font-size:15px">
+    Excelの転記・複数ファイルの集計・毎月の同じ作業。実際のファイルを2〜3個いただければ、
+    <b>そのデータで動く状態</b>を先にお見せしてから見積もります。</p>
+  <div class="btnrow" style="justify-content:center">
+    <a class="btn" href="../contact.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 22px;
+       background:var(--brand);color:#fff;text-decoration:none;font-weight:700;border-radius:10px">相談する →</a>
+    <a class="btn" href="../index.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 22px;
+       background:#fff;color:var(--brand-dark);text-decoration:none;font-weight:700;border-radius:10px;
+       border:1px solid var(--brand)">XORAについて</a>
+  </div>
+</section>
+
+<footer>制作: XORA ／ このデモの数値・店舗名は架空のもので、実在の企業のデータではありません</footer>
+</div>
+
+<script>
+/* ===== サンプルデータ（file:// でも動くようにファイル読み込みではなく埋め込み） ===== */
+const SAMPLES = [
+  { name: "渋谷店_売上_6-7月.csv", text:
+`日付,商品カテゴリ,金額
+2026/06/03,ドリンク,48000
+2026/06/11,フード,132500
+2026/06/24,物販,29800
+2026/07/02,ドリンク,51200
+2026/07/15,フード,145000
+2026/07/28,物販,33600` },
+  { name: "名古屋店 売上表(6月-7月).csv", text:
+`伝票日,区分,売上高（円）
+2026-06-05,ドリンク,"39,800"
+2026-06-18,フード,"98,400"
+2026-06-30,物販,"21,000"
+2026-07-08,ドリンク,"42,300"
+2026-07-19,フード,"110,700"
+2026-07-25,物販,"24,900"
+合計,,"337,100"` },
+  { name: "fukuoka_sales_2026.csv", text:
+`date,category,amount
+06/07/2026,Drink,¥35200
+06/21/2026,Food,¥87600
+07/04/2026,Drink,¥38900
+07/17/2026,Food,¥93100
+07/30/2026,Goods,¥18700
+`}
+];
+
+/* ===== 列名の当たり ===== */
+const HINT = {
+  date: ["日付","日時","伝票日","売上日","年月日","date","day"],
+  cat:  ["カテゴリ","商品カテゴリ","区分","分類","品目","category","type"],
+  amt:  ["金額","売上","売上高","合計金額","価格","amount","sales","total"]
+};
+/* 表記ゆれの寄せ先（実務でいちばん効く小さな辞書） */
+const ALIAS = { "drink":"ドリンク","food":"フード","goods":"物販","雑貨":"物販","飲料":"ドリンク" };
+const SHOP_ALIAS = { "fukuoka":"福岡店","shibuya":"渋谷店","nagoya":"名古屋店" };
+
+let store = [];   // {file, rows:[{shop,ym,cat,amt}], skipped:n}
+let logs = [];
+
+/* ---- CSV 1行分の分解（"..." の中のカンマを守る） ---- */
+function splitLine(line){
+  const out=[]; let cur="", q=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){ if(q && line[i+1]==='"'){cur+='"';i++;} else q=!q; }
+    else if(c===',' && !q){ out.push(cur); cur=""; }
+    else cur+=c;
+  }
+  out.push(cur);
+  return out.map(s=>s.trim());
+}
+function norm(s){ return String(s).replace(/^﻿/,"").replace(/[（）\s]/g,"").toLowerCase(); }
+function findCol(headers, keys){
+  for(let i=0;i<headers.length;i++){
+    const h=norm(headers[i]);
+    if(keys.some(k=>h.includes(norm(k)))) return i;
+  }
+  return -1;
+}
+/* ---- 日付: 2026/06/03・2026-06-03・06/03/2026 を吸収して "2026-06" にする ---- */
+function toYM(v){
+  const s=String(v).trim();
+  let m=s.match(/^(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})$/);
+  if(m) return m[1]+"-"+String(m[2]).padStart(2,"0");
+  m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);   // 米国式 MM/DD/YYYY
+  if(m) return m[3]+"-"+String(m[1]).padStart(2,"0");
+  m=s.match(/^(\d{4})年(\d{1,2})月/);
+  if(m) return m[1]+"-"+String(m[2]).padStart(2,"0");
+  return null;
+}
+/* ---- 金額: "1,200" ¥1200 １２００ を数値に ---- */
+function toNum(v){
+  const s=String(v).replace(/[^\d.\-]/g, c => /[０-９]/.test(c) ? String.fromCharCode(c.charCodeAt(0)-0xFEE0) : "");
+  const n=parseFloat(s);
+  return isNaN(n)?null:n;
+}
+function shopFromName(name){
+  return name.replace(/\.csv$/i,"").split(/[_\s（(]/)[0] || name;
+}
+
+/* ---- 1ファイルを取り込む ---- */
+function ingest(name, text){
+  const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
+  if(!lines.length){ logs.push(["w", name+"：中身が空でした"]); return; }
+  const headers = splitLine(lines[0]);
+  const di=findCol(headers,HINT.date), ci=findCol(headers,HINT.cat), ai=findCol(headers,HINT.amt);
+  if(di<0||ai<0){ logs.push(["w", name+"：日付か金額の列が見つからず取り込めません"]); return; }
+
+  let shop = shopFromName(name);
+  const renamed = SHOP_ALIAS[norm(shop)] ? ("「"+shop+"」→") : "";
+  if(SHOP_ALIAS[norm(shop)]) shop=SHOP_ALIAS[norm(shop)];
+  logs.push(["ok", name+"｜店舗=ファイル名から"+renamed+"「"+shop+"」／日付=「"+headers[di]+"」／金額=「"+headers[ai]+"」"
+    +(ci>=0?"／区分=「"+headers[ci]+"」":"／区分の列なし→「未分類」")]);
+  const rows=[]; let skipped=0; const fixed={};
+  for(let i=1;i<lines.length;i++){
+    const c=splitLine(lines[i]);
+    const ym=toYM(c[di]||""), amt=toNum(c[ai]||"");
+    if(ym===null || amt===null){ skipped++; continue; }
+    let cat = ci>=0 ? (c[ci]||"未分類") : "未分類";
+    const key=norm(cat);
+    if(ALIAS[key]){ const k=cat+"→"+ALIAS[key]; fixed[k]=(fixed[k]||0)+1; cat=ALIAS[key]; }
+    rows.push({shop, ym, cat, amt});
+  }
+  const fx=Object.entries(fixed);
+  if(fx.length) logs.push(["ok", name+"：区分の表記ゆれを統合 "+fx.map(([k,n])=>"「"+k+"」"+n+"件").join("、")]);
+  if(skipped) logs.push(["w", name+"：合計行・空行など "+skipped+"行 を集計から除きました"]);
+  store.push({file:name, shop, rows, skipped});
+}
+
+/* ---- 集計して描画 ---- */
+function render(){
+  const all = store.flatMap(s=>s.rows);
+  const shops=[...new Set(all.map(r=>r.shop))];
+  const yms=[...new Set(all.map(r=>r.ym))].sort();
+  const cell={};
+  all.forEach(r=>{ cell[r.shop+"|"+r.ym]=(cell[r.shop+"|"+r.ym]||0)+r.amt; });
+
+  const yen=n=>"¥"+Math.round(n).toLocaleString("ja-JP");
+  const t=document.getElementById("tbl");
+  t.tHead.innerHTML="<tr><th>店舗</th>"+yms.map(y=>"<th>"+y+"</th>").join("")+"<th>合計</th></tr>";
+  t.tBodies[0].innerHTML=shops.map(s=>{
+    const vals=yms.map(y=>cell[s+"|"+y]||0);
+    return "<tr><td>"+s+"</td>"+vals.map(v=>"<td>"+(v?yen(v):"—")+"</td>").join("")
+      +"<td><b>"+yen(vals.reduce((a,b)=>a+b,0))+"</b></td></tr>";
+  }).join("");
+  const colSum=yms.map(y=>shops.reduce((a,s)=>a+(cell[s+"|"+y]||0),0));
+  const total=colSum.reduce((a,b)=>a+b,0);
+  t.tFoot.innerHTML="<tr><td>合計</td>"+colSum.map(v=>"<td>"+yen(v)+"</td>").join("")+"<td>"+yen(total)+"</td></tr>";
+
+  /* カテゴリ内訳 */
+  const bycat={}; all.forEach(r=>bycat[r.cat]=(bycat[r.cat]||0)+r.amt);
+  /* バーの長さは「全体に対する割合」。最大値基準にすると1位が常に満タンになり、%の数字と見た目がずれる */
+  document.getElementById("bars").innerHTML="<h3 style='font-size:15px;margin:18px 0 10px'>カテゴリ別の内訳</h3>"+
+    Object.entries(bycat).sort((a,b)=>b[1]-a[1]).map(([k,v])=>
+      "<div class='bar'><div class='lbl'><span>"+k+"</span><span>"+yen(v)+"（"+Math.round(v/total*100)+"%）</span></div>"+
+      "<div class='track'><div class='fill' data-w='"+(v/total*100)+"'></div></div></div>").join("");
+  requestAnimationFrame(()=>document.querySelectorAll(".fill").forEach(f=>f.style.width=f.dataset.w+"%"));
+
+  /* ファイル一覧・ログ・KPI */
+  document.getElementById("files").innerHTML=store.map(s=>
+    "<div class='file"+(s.skipped?" skip":"")+"'><span class='dot'></span><span class='name'>"+s.file+"</span>"+
+    "<span class='meta'>"+s.rows.length+"件"+(s.skipped?"／除外"+s.skipped:"")+"</span></div>").join("");
+  document.getElementById("log").innerHTML=logs.map(([t,m])=>
+    "<li><span class='tag"+(t==="w"?" w":"")+"'>"+(t==="w"?"注意":"判定")+"</span><span>"+m+"</span></li>").join("");
+  document.getElementById("kFiles").textContent=store.length;
+  document.getElementById("kRows").textContent=all.length;
+  document.getElementById("kSkip").textContent=store.reduce((a,s)=>a+s.skipped,0);
+  document.getElementById("kSum").textContent=Math.round(total).toLocaleString("ja-JP");
+
+  window.__csv = ()=> {
+    const head=["店舗",...yms,"合計"];
+    const body=shops.map(s=>{const v=yms.map(y=>cell[s+"|"+y]||0);return [s,...v,v.reduce((a,b)=>a+b,0)];});
+    body.push(["合計",...colSum,total]);
+    return [head,...body].map(r=>r.join(",")).join("\r\n");
+  };
+}
+
+function loadSamples(){
+  store=[]; logs=[];
+  SAMPLES.forEach(s=>ingest(s.name,s.text));
+  render();
+}
+
+/* ---- 受け口 ---- */
+function readFiles(fileList){
+  const files=[...fileList].filter(f=>/\.csv$/i.test(f.name));
+  if(!files.length){ logs.unshift(["w","CSVファイルが見つかりませんでした（.csv のみ受け付けます）"]); render(); return; }
+  store=[]; logs=[];
+  let done=0;
+  files.forEach(f=>{
+    const r=new FileReader();
+    r.onload=()=>{ ingest(f.name, r.result); if(++done===files.length) render(); };
+    r.onerror=()=>{ logs.push(["w", f.name+"：読み込みに失敗しました"]); if(++done===files.length) render(); };
+    r.readAsText(f, "UTF-8");
+  });
+}
+const drop=document.getElementById("drop"), input=document.getElementById("input");
+document.getElementById("pick").onclick=()=>input.click();
+input.onchange=e=>readFiles(e.target.files);
+["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("on");}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("on");}));
+drop.addEventListener("drop",e=>readFiles(e.dataTransfer.files));
+document.getElementById("reset").onclick=loadSamples;
+document.getElementById("dl").onclick=()=>{
+  const blob=new Blob(["﻿"+window.__csv()],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob); a.download="集計表.csv";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+};
+
+loadSamples();
+</script>
+</body>
+</html>
