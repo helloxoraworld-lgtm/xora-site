@@ -25,6 +25,7 @@
   var NAV_ITEMS = [
     { key: "services", label: "サービス", href: "services.html" },
     { key: "works", label: "実績", href: "works.html" },
+    { key: "log", label: "記録", href: "log.html" },
     { key: "strengths", label: "強み", href: "strengths.html" },
     { key: "process", label: "流れ", href: "process.html" },
     { key: "pricing", label: "料金", href: "pricing.html" },
