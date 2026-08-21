@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>予約システム デモ</title>
+<style>
+:root{
+  --bg:#faf9f7; --card:#fff; --ink:#1c1a18; --sub:#6b6560;
+  --line:#e6e1db; --accent:#1a6b5a; --accent-soft:#e8f2ef; --warn:#b8342a;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:520px;margin:0 auto;padding:0 16px 64px}
+header{background:var(--accent);color:#fff;padding:20px 16px;margin-bottom:20px}
+header .inner{max-width:520px;margin:0 auto}
+header h1{margin:0;font-size:19px;letter-spacing:.02em}
+header p{margin:4px 0 0;font-size:13px;opacity:.85}
+.tabs{display:flex;gap:8px;margin:0 0 18px}
+.tabs button{flex:1;padding:11px 8px;border:1px solid var(--line);background:var(--card);
+  border-radius:10px;font-size:14px;cursor:pointer;color:var(--sub);font-family:inherit}
+.tabs button[aria-selected=true]{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+h2{font-size:15px;margin:0 0 12px;letter-spacing:.02em}
+.step{font-size:12px;color:var(--accent);font-weight:700;margin-bottom:6px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;
+  cursor:pointer;font-size:14px;text-align:left;font-family:inherit;color:inherit;width:100%}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-pressed=true]{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
+.opt .price{color:var(--sub);font-size:13px;white-space:nowrap}
+.days{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px}
+.day{min-width:60px;padding:9px 4px;border:1px solid var(--line);border-radius:9px;
+  background:#fff;text-align:center;font-size:13px;cursor:pointer;font-family:inherit;color:inherit}
+.day[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.day small{display:block;font-size:11px;opacity:.7}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.slot{padding:10px 2px;border:1px solid var(--line);border-radius:8px;background:#fff;
+  font-size:13px;cursor:pointer;font-family:inherit;color:inherit}
+.slot[disabled]{opacity:.3;cursor:not-allowed;text-decoration:line-through}
+.slot[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
+input,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;
+  font-size:16px;font-family:inherit;background:#fff;color:inherit}
+label{display:block;font-size:13px;color:var(--sub);margin:10px 0 4px}
+.btn{width:100%;padding:14px;background:var(--accent);color:#fff;border:0;border-radius:10px;
+  font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:14px}
+.btn[disabled]{background:#c9c4be;cursor:not-allowed}
+.done{text-align:center;padding:26px 16px}
+.done .mark{font-size:40px;color:var(--accent)}
+.sum{background:var(--accent-soft);border-radius:10px;padding:13px;font-size:14px;margin:14px 0;text-align:left}
+.sum div{display:flex;justify-content:space-between;padding:3px 0}
+.sum b{font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--sub);font-weight:400;font-size:12px}
+.tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;
+  background:var(--accent-soft);color:var(--accent);font-weight:700}
+.tag.new{background:#fdf0e6;color:#a8621f}
+.muted{color:var(--sub);font-size:13px}
+.note{font-size:12px;color:var(--sub);margin-top:6px}
+.demobar{background:#2b2724;color:#e8e3dd;font-size:12px;padding:9px 16px;text-align:center}
+.demobar b{color:#fff}
+.empty{text-align:center;color:var(--sub);padding:22px 0;font-size:13px}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.kpi div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 6px;text-align:center}
+.kpi b{display:block;font-size:20px;color:var(--accent)}
+.kpi span{font-size:11px;color:var(--sub)}
+</style>
+</head>
+<body>
+
+<div class="demobar">これは動作するデモです。<b>実際に予約でき、その場で管理画面に反映されます</b></div>
+
+<header><div class="inner">
+  <h1 id="shopName">サンプル理容室</h1>
+  <p id="shopSub">ネット予約 24時間受付</p>
+</div></header>
+
+<div class="wrap">
+
+  <div class="tabs" role="tablist">
+    <button id="tabGuest" role="tab" aria-selected="true" onclick="show('guest')">お客様の画面</button>
+    <button id="tabAdmin" role="tab" aria-selected="false" onclick="show('admin')">お店の画面</button>
+  </div>
+
+  <!-- ========== お客様側 ========== -->
+  <section id="guest">
+    <div class="card" id="stepMenu">
+      <div class="step">STEP 1</div>
+      <h2>メニューを選ぶ</h2>
+      <div class="opts" id="menuList"></div>
+    </div>
+
+    <div class="card" id="stepTime" hidden>
+      <div class="step">STEP 2</div>
+      <h2>日時を選ぶ</h2>
+      <div class="days" id="dayList"></div>
+      <div class="slots" id="slotList"></div>
+      <p class="note">×印は予約が入っている時間です</p>
+    </div>
+
+    <div class="card" id="stepInfo" hidden>
+      <div class="step">STEP 3</div>
+      <h2>お名前を入れる</h2>
+      <label>お名前</label>
+      <input id="cName" placeholder="山田 太郎" autocomplete="name">
+      <label>電話番号</label>
+      <input id="cTel" placeholder="090-0000-0000" inputmode="tel" autocomplete="tel">
+      <label>ご要望（任意）</label>
+      <textarea id="cMemo" rows="2" placeholder="前回と同じで"></textarea>
+      <div class="sum" id="sumBox"></div>
+      <button class="btn" id="submitBtn" onclick="book()">この内容で予約する</button>
+    </div>
+
+    <div class="card done" id="stepDone" hidden>
+      <div class="mark">✓</div>
+      <h2 style="margin:8px 0">ご予約を承りました</h2>
+      <div class="sum" id="doneBox"></div>
+      <p class="muted">この予約は「お店の画面」タブにすぐ反映されています。<br>切り替えてご確認ください。</p>
+      <button class="btn" onclick="reset()">もう一度予約してみる</button>
+    </div>
+  </section>
+
+  <!-- ========== お店側 ========== -->
+  <section id="admin" hidden>
+    <div class="kpi">
+      <div><b id="kToday">0</b><span>今日の予約</span></div>
+      <div><b id="kAll">0</b><span>予約総数</span></div>
+      <div><b id="kNew">0</b><span>新規のお客様</span></div>
+    </div>
+
+    <div class="card">
+      <h2>予約一覧</h2>
+      <table id="bookTable"><thead><tr>
+        <th style="width:34%">日時</th><th>お客様</th><th style="width:32%">メニュー</th>
+      </tr></thead><tbody id="bookBody"></tbody></table>
+      <div class="empty" id="bookEmpty">まだ予約がありません。「お客様の画面」から予約してみてください。</div>
+    </div>
+
+    <div class="card">
+      <h2>顧客カルテ</h2>
+      <table id="custTable"><thead><tr>
+        <th style="width:30%">お客様</th><th style="width:18%">来店</th><th>履歴・メモ</th>
+      </tr></thead><tbody id="custBody"></tbody></table>
+      <div class="empty" id="custEmpty">予約が入ると、お客様ごとの来店履歴が自動でたまります。</div>
+      <p class="note">同じ電話番号のお客様は自動で1件にまとまり、来店回数が数えられます。</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// ---- 店名はURLで差し替えられる: index.html?shop=〇〇理容室 -----------------
+var q = new URLSearchParams(location.search);
+if (q.get('shop')) {
+  document.getElementById('shopName').textContent = q.get('shop');
+  document.title = q.get('shop') + ' 予約';
+}
+if (q.get('sub')) document.getElementById('shopSub').textContent = q.get('sub');
+
+// ---- 保存先。file:// で localStorage が使えない環境でも落ちないようにする ----
+var mem = [];
+function load(){
+  try { return JSON.parse(localStorage.getItem('bk') || '[]'); }
+  catch(e){ return mem; }
+}
+function save(v){
+  mem = v;
+  try { localStorage.setItem('bk', JSON.stringify(v)); } catch(e){}
+}
+
+var MENUS = [
+  {n:'カット', p:'3,800円', m:40},
+  {n:'カット＋シェーブ', p:'5,200円', m:60},
+  {n:'カラー', p:'6,500円', m:90},
+  {n:'カット＋カラー', p:'9,800円', m:120}
+];
+var HOURS = ['10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00'];
+var sel = {menu:null, day:null, slot:null};
+
+function show(which){
+  document.getElementById('guest').hidden = (which !== 'guest');
+  document.getElementById('admin').hidden = (which !== 'admin');
+  document.getElementById('tabGuest').setAttribute('aria-selected', which === 'guest');
+  document.getElementById('tabAdmin').setAttribute('aria-selected', which === 'admin');
+  if (which === 'admin') renderAdmin();
+}
+
+function dayLabel(d){
+  var w = ['日','月','火','水','木','金','土'][d.getDay()];
+  return {d:(d.getMonth()+1) + '/' + d.getDate(), w:'(' + w + ')'};
+}
+
+function renderMenus(){
+  var h = '';
+  MENUS.forEach(function(m, i){
+    h += '<button class="opt" aria-pressed="false" onclick="pickMenu(' + i + ')">' +
+         '<span>' + m.n + '<br><span class="price">約' + m.m + '分</span></span>' +
+         '<span class="price">' + m.p + '</span></button>';
+  });
+  document.getElementById('menuList').innerHTML = h;
+}
+
+function pickMenu(i){
+  sel.menu = MENUS[i];
+  var opts = document.querySelectorAll('#menuList .opt');
+  for (var k = 0; k < opts.length; k++) opts[k].setAttribute('aria-pressed', k === i);
+  document.getElementById('stepTime').hidden = false;
+  renderDays();
+  document.getElementById('stepTime').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function renderDays(){
+  var h = '', base = new Date();
+  for (var i = 0; i < 7; i++){
+    var d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + i);
+    var L = dayLabel(d);
+    var key = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+    h += '<button class="day" aria-pressed="false" onclick="pickDay(this,\'' + key + '\',\'' +
+         L.d + L.w + '\')">' + L.d + '<small>' + L.w + '</small></button>';
+  }
+  document.getElementById('dayList').innerHTML = h;
+  document.getElementById('slotList').innerHTML =
+    '<p class="muted" style="grid-column:1/-1;margin:0">日付を選んでください</p>';
+}
+
+function pickDay(el, key, label){
+  sel.day = {key:key, label:label};
+  sel.slot = null;
+  var ds = document.querySelectorAll('.day');
+  for (var k = 0; k < ds.length; k++) ds[k].setAttribute('aria-pressed', ds[k] === el);
+  var taken = load().filter(function(b){ return b.dayKey === key; }).map(function(b){ return b.slot; });
+  var h = '';
+  HOURS.forEach(function(t){
+    var off = taken.indexOf(t) >= 0;
+    h += '<button class="slot" aria-pressed="false"' + (off ? ' disabled' : '') +
+         ' onclick="pickSlot(this,\'' + t + '\')">' + t + '</button>';
+  });
+  document.getElementById('slotList').innerHTML = h;
+}
+
+function pickSlot(el, t){
+  sel.slot = t;
+  var ss = document.querySelectorAll('.slot');
+  for (var k = 0; k < ss.length; k++) ss[k].setAttribute('aria-pressed', ss[k] === el);
+  document.getElementById('stepInfo').hidden = false;
+  document.getElementById('sumBox').innerHTML =
+    '<div><span>メニュー</span><b>' + sel.menu.n + '</b></div>' +
+    '<div><span>日時</span><b>' + sel.day.label + ' ' + sel.slot + '</b></div>' +
+    '<div><span>料金</span><b>' + sel.menu.p + '</b></div>';
+  document.getElementById('stepInfo').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function book(){
+  var name = document.getElementById('cName').value.trim();
+  var tel = document.getElementById('cTel').value.trim();
+  if (!name){ alert('お名前を入れてください'); return; }
+  if (!sel.menu || !sel.day || !sel.slot){ alert('メニューと日時を選んでください'); return; }
+  var all = load();
+  all.push({
+    dayKey: sel.day.key, dayLabel: sel.day.label, slot: sel.slot,
+    menu: sel.menu.n, price: sel.menu.p,
+    name: name, tel: tel,
+    memo: document.getElementById('cMemo').value.trim(),
+    at: new Date().toISOString()
+  });
+  save(all);
+  document.getElementById('doneBox').innerHTML = document.getElementById('sumBox').innerHTML +
+    '<div><span>お名前</span><b>' + name + ' 様</b></div>';
+  ['stepMenu','stepTime','stepInfo'].forEach(function(id){ document.getElementById(id).hidden = true; });
+  document.getElementById('stepDone').hidden = false;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function reset(){
+  sel = {menu:null, day:null, slot:null};
+  ['cName','cTel','cMemo'].forEach(function(id){ document.getElementById(id).value = ''; });
+  document.getElementById('stepDone').hidden = true;
+  document.getElementById('stepMenu').hidden = false;
+  document.getElementById('stepTime').hidden = true;
+  document.getElementById('stepInfo').hidden = true;
+  renderMenus();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderAdmin(){
+  var all = load().slice().sort(function(a,b){
+    return (a.dayKey + a.slot).localeCompare(b.dayKey + b.slot);
+  });
+  var body = '';
+  all.forEach(function(b){
+    body += '<tr><td>' + b.dayLabel + '<br><b>' + b.slot + '</b></td>' +
+            '<td>' + b.name + ' 様<br><span class="muted">' + (b.tel || '—') + '</span></td>' +
+            '<td>' + b.menu + '<br><span class="muted">' + b.price + '</span></td></tr>';
+  });
+  document.getElementById('bookBody').innerHTML = body;
+  document.getElementById('bookEmpty').hidden = all.length > 0;
+
+  // 電話番号（無ければ名前）でお客様をまとめる
+  var byKey = {};
+  all.forEach(function(b){
+    var k = b.tel || b.name;
+    if (!byKey[k]) byKey[k] = {name:b.name, tel:b.tel, rows:[]};
+    byKey[k].rows.push(b);
+  });
+  var keys = Object.keys(byKey), cbody = '';
+  keys.forEach(function(k){
+    var c = byKey[k];
+    var isNew = c.rows.length === 1;
+    var hist = c.rows.map(function(r){
+      return r.dayLabel + ' ' + r.menu + (r.memo ? '（' + r.memo + '）' : '');
+    }).join('<br>');
+    cbody += '<tr><td>' + c.name + ' 様<br><span class="muted">' + (c.tel || '—') + '</span></td>' +
+             '<td><span class="tag ' + (isNew ? 'new' : '') + '">' +
+             (isNew ? '新規' : c.rows.length + '回目') + '</span></td>' +
+             '<td class="muted">' + hist + '</td></tr>';
+  });
+  document.getElementById('custBody').innerHTML = cbody;
+  document.getElementById('custEmpty').hidden = keys.length > 0;
+
+  var today = new Date();
+  var tKey = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
+  document.getElementById('kToday').textContent = all.filter(function(b){ return b.dayKey === tKey; }).length;
+  document.getElementById('kAll').textContent = all.length;
+  document.getElementById('kNew').textContent = keys.filter(function(k){ return byKey[k].rows.length === 1; }).length;
+}
+
+renderMenus();
+</script>
+</body>
+</html>
