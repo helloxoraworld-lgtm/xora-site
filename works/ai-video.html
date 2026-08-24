@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI映像制作 — XORA</title>
+<meta name="description" content="商品写真1枚から、SNS広告に使えるシネマティックな短尺動画を生成します。実際に生成した2本をそのまま掲載しています。">
+<link rel="canonical" href="https://helloxoraworld-lgtm.github.io/xora-site/works/ai-video.html">
+
+<!-- OGP -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XORA">
+<meta property="og:title" content="AI映像制作 — XORA">
+<meta property="og:description" content="商品写真1枚から、SNS広告に使えるシネマティックな短尺動画を生成します。実際に生成した2本をそのまま掲載しています。">
+<meta property="og:url" content="https://helloxoraworld-lgtm.github.io/xora-site/works/ai-video.html">
+<meta property="og:image" content="https://helloxoraworld-lgtm.github.io/xora-site/assets/images/works/work-aivideo.jpg">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI映像制作 — XORA">
+<meta name="twitter:description" content="商品写真1枚から、SNS広告に使えるシネマティックな短尺動画を生成します。実際に生成した2本をそのまま掲載しています。">
+<meta name="twitter:image" content="https://helloxoraworld-lgtm.github.io/xora-site/assets/images/works/work-aivideo.jpg">
+
+<link rel="icon" href="../assets/images/xora-symbol.svg?v=10" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/common.css?v=10">
+<style>
+  .video-grid{display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));align-items:start}
+  .video-grid figure{margin:0}
+  .video-grid video{width:100%;height:auto;display:block;border-radius:10px;background:#03080F}
+  .video-grid figcaption{margin-top:.6rem;font-size:.85rem;opacity:.75;line-height:1.6}
+</style>
+</head>
+<body>
+
+<header id="site-header" data-base="../" data-active="works"></header>
+
+<main id="main">
+
+  <section class="page-intro">
+    <div class="page-wrap">
+      <a class="back-link" href="../works.html">← 実績一覧に戻る</a>
+      <p class="page-eyebrow"><span class="en">WORKS</span>実績</p>
+      <h1>AI映像制作</h1>
+      <p class="page-lead">商品写真1枚から、SNS広告に使えるシネマティックな短尺動画を作ります。ここに置いてある2本は、実際に生成したものをそのまま載せています。加工も差し替えもしていません。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="page-wrap">
+      <span class="work-tag">Concept Project</span>
+      <p class="work-status">映像サンプル・架空の商品</p>
+      <h2>商品広告の短尺動画（正方形／縦型）</h2>
+
+      <div class="video-grid">
+        <figure>
+          <video controls playsinline preload="none" muted loop
+                 poster="../assets/images/works/work-aivideo-serum.jpg">
+            <source src="../assets/video/sample-serum.mp4" type="video/mp4">
+            この動画を再生できないブラウザです。
+          </video>
+          <figcaption>正方形（1440×1440・5秒）。SNSのフィード投稿向け。架空の商品です</figcaption>
+        </figure>
+        <figure>
+          <video controls playsinline preload="none" muted loop
+                 poster="../assets/images/works/work-aivideo-coffee.jpg">
+            <source src="../assets/video/sample-coffee.mp4" type="video/mp4">
+            この動画を再生できないブラウザです。
+          </video>
+          <figcaption>縦型（1088×1904・5秒）。リール／ショート向け。上下に文字を載せる余白を残してあります。架空の商品です</figcaption>
+        </figure>
+      </div>
+
+      <dl class="detail-meta">
+        <dt>課題</dt><dd>小規模な物販・飲食では、撮影機材もスタジオも無いまま、SNS広告用の動く素材だけが必要になる。撮影を外注すると1本あたりの単価が合わない</dd>
+        <dt>作ったもの</dt><dd>商品写真1枚（または商品の指定だけ）から、5秒前後のシネマティックな広告動画。正方形と縦型の両方に対応</dd>
+        <dt>担当範囲</dt><dd>構成の設計、静止画の生成、動きの指示、書き出し、仕様確認まで単独で実施</dd>
+        <dt>使用技術</dt><dd>Higgsfield（Nano Banana / Kling 3.0 Turbo）で生成し、ffmpegで仕様確認と書き出し。指示はすべて日本語で記述</dd>
+        <dt>工夫</dt><dd>「被写体・動作・ショット・光・動き・画の質感・音」を項目に分けて指示し、あわせて「入れないもの」（人物・文字・ロゴ・速いカット・大きなカメラの動き・商品の変形）を明示する。ここを書かないと生成のたびに別物になり、作り直しのぶんだけ費用が増える</dd>
+        <dt>検証したこと</dt><dd>同じ内容を日本語と英語の両方で生成して比較し、日本語の指示でも条件の再現度が落ちないことを確認したうえで、日本語で運用している</dd>
+        <dt>成果・稼働状況</dt><dd>掲載中の2本は架空の商品を題材にした自主制作サンプルです。実在の企業・商品ではありません</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="page-wrap">
+      <p class="page-eyebrow"><span class="en">CONTACT</span>相談</p>
+      <h2>プロジェクトを相談する</h2>
+      <p>商品写真をお持ちであれば、そのままの状態から作れます。まずは状況を教えてください。</p>
+      <a class="btn btn-primary btn-lg" href="../contact.html">プロジェクトを相談する <span class="arrow">→</span></a>
+    </div>
+  </section>
+
+</main>
+
+<script src="../assets/js/header.js?v=10"></script>
+<script>
+if (location.hostname.indexOf("github.io") !== -1) {
+  var gc = document.createElement("script");
+  gc.async = true;
+  gc.src = "https://gc.zgo.at/count.js";
+  gc.setAttribute("data-goatcounter", "https://xora.goatcounter.com/count");
+  document.body.appendChild(gc);
+}
+</script>
+</body>
+</html>
