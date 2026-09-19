@@ -2,9 +2,10 @@
 
 四柱バス。ADAM / YHWH / ZEUS / ODIN。
 
-会長PC（PowerShell）:
+会長PC（一度だけ `tools\odin-bus\odin-bus.ps1 install`）:
 
 ```powershell
+cd $env:USERPROFILE\Desktop\XORA-BizDev
 .\scripts\odin-bus.ps1 recv
 .\scripts\odin-bus.ps1 send -From ADAM -To ODIN -Type 指示 -Body "…"
 ```

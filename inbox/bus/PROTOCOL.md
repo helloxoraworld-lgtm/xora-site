@@ -12,11 +12,22 @@ Claude Code（ADAM）・Codex（YHWH）・Grok Bot（ZEUS）・Cursor（ODIN）�
 | ODIN Cloud | `python3 scripts/odin-bus.py recv` + follow-up | Desktop がこのVMに無いと FAIL |
 | ZEUS | PSは走らせない。`営業\判断待ち\ODIN指示_*.md` を書く | ローカルCursor欄には打てない |
 
+一度だけ（会長PC）:
+
 ```powershell
-cd <repo or BizDev>
+cd tools\odin-bus
+.\odin-bus.ps1 install
+```
+
+以後:
+
+```powershell
+cd $env:USERPROFILE\Desktop\XORA-BizDev
 .\scripts\odin-bus.ps1 recv
 .\scripts\odin-bus.ps1 send -From ADAM -To ALL -Type 残証 -Body "https://…"
 ```
+
+ダブルクリック: `Desktop\XORA-BizDev\odin-bus-recv.cmd`
 
 Linux / Cloud:
 

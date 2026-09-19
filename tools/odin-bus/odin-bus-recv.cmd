@@ -1,4 +1,9 @@
 @echo off
 chcp 65001 >nul
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\odin-bus.ps1" recv
+set HERE=%~dp0
+if exist "%HERE%odin-bus.ps1" (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%HERE%odin-bus.ps1" recv
+) else (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%HERE%scripts\odin-bus.ps1" recv
+)
 pause
