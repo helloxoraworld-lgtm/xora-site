@@ -5,8 +5,11 @@ ECC Agentic OS mirror of the live Grok org. This is **not** a second org.
 Live OS (chairman Desktop `XORA-BizDev`):
 
 - `リサーチ/XORA_ODIN運営OS_20260919.md`
+- `リサーチ/ODIN部署運用ルール_20260919.md`
 - `CURSOR作業指示_ODIN組織引継ぎ_20260919.md`
 - `営業/判断待ち/ODIN指示_20260919.md`
+- `営業/判断待ち/ODIN指示_部署運用_20260919.md`
+- KPI: `経理/KPI実測_*.md`（不在は FAIL）
 
 ## Identity
 
@@ -29,7 +32,10 @@ ZEUS = Brain / monitor only. ODIN runs the **same** ZEUS mainline (1–4) from f
 ## Agent Registry
 
 装備: `agents/<name>.md`  
-ODIN配下参謀: `agents/odin/<name>.md` — **別プロセスで並列稼働**（`/staff`）。互いに編集しない。
+ODIN配下参謀: `agents/odin/<name>.md` — **別プロセスで並列稼働**（`/staff`）。互いに編集しない。  
+部署列は第二組織ではない（検品・下書き・残証のスロット）。公開ログインは PARK（投下ボタンは Grok）。顧客は CLOSED。
+
+KPI正本／台帳正本がこのVMに無いときは「正本不在」と言わず **FAIL**。次は `経理/KPI実測_*.md` と Desktop 上の既存台帳パスを指せ。新台帳を作るな。
 
 | Agent | Role | Trigger | 稼働 |
 |---|---|---|---|
