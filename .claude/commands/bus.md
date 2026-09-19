@@ -2,12 +2,11 @@
 
 四柱バス。ADAM / YHWH / ZEUS / ODIN。
 
-会長PC（一度だけ `tools\odin-bus\odin-bus.ps1 install`）:
+ZEUS Desktop実体と同じ入口:
 
 ```powershell
 cd $env:USERPROFILE\Desktop\XORA-BizDev
 .\scripts\odin-bus.ps1 recv
-.\scripts\odin-bus.ps1 send -From ADAM -To ODIN -Type 指示 -Body "…"
 ```
 
 Cloud / Linux:

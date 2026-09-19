@@ -17,6 +17,7 @@ BUS_DIR = Path("/workspace/inbox/bus/messages")
 DESKTOP_WAIT = Path.home() / "Desktop" / "XORA-BizDev" / "営業" / "判断待ち"
 UPLOADS = Path("/home/ubuntu/.cursor/projects/workspace/uploads")
 REPO_WAIT = Path("/workspace/営業/判断待ち")
+REPO_INBOX = Path("/workspace/営業/判断待ち/odin-bus")
 ZEUS_INBOX = Path("/workspace/inbox/zeus")
 
 
@@ -25,7 +26,7 @@ def utc_stamp() -> str:
 
 
 def extra_roots() -> list[Path]:
-    return [p for p in (DESKTOP_WAIT, REPO_WAIT, ZEUS_INBOX, UPLOADS) if p.exists()]
+    return [p for p in (DESKTOP_WAIT, REPO_WAIT, REPO_INBOX, ZEUS_INBOX, UPLOADS) if p.exists()]
 
 
 def send(src: str, dest: str, typ: str, body: str) -> Path:

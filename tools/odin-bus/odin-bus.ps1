@@ -1,8 +1,11 @@
 #Requires -Version 5.1
 <#
-  odin-bus — ADAM / YHWH / local ODIN share Desktop XORA-BizDev.
-  ZEUS does not run this. ZEUS writes 営業\判断待ち\ODIN指示_*.md
-  Not a Grok API. No dual-dispatch.
+  Same layout as Desktop XORA-BizDev (ZEUS 2026-09-19):
+    scripts\odin-bus.ps1
+    scripts\odin-bus-recv.cmd
+    scripts\odin-bus\PROTOCOL.md
+    inbox: 営業\判断待ち\odin-bus\
+  ZEUS does not run this. ZEUS writes ODIN指示_*.md
 #>
 [CmdletBinding()]
 param(
@@ -25,54 +28,48 @@ function Get-BizDev {
   return (Join-Path $env:USERPROFILE "Desktop\XORA-BizDev")
 }
 
-function Get-WaitDir {
-  return (Join-Path (Get-BizDev) "営業\判断待ち")
-}
+function Get-WaitDir { return (Join-Path (Get-BizDev) "営業\判断待ち") }
+function Get-InboxDir { return (Join-Path (Get-WaitDir) "odin-bus") }
 
-function Get-Stamp {
-  return [DateTime]::UtcNow.ToString("yyyyMMddTHHmmssZ")
-}
+function Get-Stamp { return [DateTime]::UtcNow.ToString("yyyyMMddTHHmmssZ") }
 
 function Show-Help {
   @"
-odin-bus  四柱ファイルバス (PowerShell)
-正本フォルダ: $(Get-WaitDir)
+odin-bus
+入口:
+  cd `$env:USERPROFILE\Desktop\XORA-BizDev
+  .\scripts\odin-bus.ps1 recv
 
-  .\odin-bus.ps1 recv
-  .\odin-bus.ps1 send -From ADAM -To ODIN -Type 指示 -Body "https://..."
-  .\odin-bus.ps1 install
-
-From/To: ZEUS ADAM YHWH ODIN ALL
-Type: 指示 残証 監視
-ZEUSはこれを実行しない。ODIN指示_*.md を判断待ちへ置く。
-Grok API なし。本文はパスとURLだけ。公開ログインは撃たない。
+inbox: $(Get-InboxDir)
+ZEUSはPSを走らせない。ODIN指示_*.md を 判断待ち へ。
 "@
 }
 
 function Install-Bus {
   $destRoot = Get-BizDev
   $destScripts = Join-Path $destRoot "scripts"
-  $wait = Get-WaitDir
-  New-Item -ItemType Directory -Force -Path $destScripts, $wait | Out-Null
-  $here = $PSScriptRoot
-  Copy-Item -Force (Join-Path $here "odin-bus.ps1") (Join-Path $destScripts "odin-bus.ps1")
-  Copy-Item -Force (Join-Path $here "odin-bus.cmd") (Join-Path $destScripts "odin-bus.cmd")
-  Copy-Item -Force (Join-Path $here "odin-bus-recv.cmd") (Join-Path $destRoot "odin-bus-recv.cmd")
+  $destProto = Join-Path $destScripts "odin-bus"
+  $inbox = Get-InboxDir
+  New-Item -ItemType Directory -Force -Path $destScripts, $destProto, $inbox | Out-Null
+  $src = if (Test-Path (Join-Path $PSScriptRoot "odin-bus.ps1")) { $PSScriptRoot } else { $PSScriptRoot }
+  Copy-Item -Force (Join-Path $src "odin-bus.ps1") (Join-Path $destScripts "odin-bus.ps1")
+  $recv = Join-Path $src "odin-bus-recv.cmd"
+  if (Test-Path $recv) { Copy-Item -Force $recv (Join-Path $destScripts "odin-bus-recv.cmd") }
+  $proto = Join-Path $src "odin-bus\PROTOCOL.md"
+  if (Test-Path $proto) { Copy-Item -Force $proto (Join-Path $destProto "PROTOCOL.md") }
   Write-Output "PASS $destRoot"
   Write-Output (Join-Path $destScripts "odin-bus.ps1")
-  Write-Output $wait
+  Write-Output $inbox
 }
 
 function Send-Bus {
-  if ($Pillars -notcontains $From) { throw "FAIL -From ZEUS|ADAM|YHWH|ODIN" }
-  if ($To -ne "ALL" -and $Pillars -notcontains $To) { throw "FAIL -To ZEUS|ADAM|YHWH|ODIN|ALL" }
-  if (-not $Type) { throw "FAIL -Type 指示|残証|監視" }
+  if ($Pillars -notcontains $From) { throw "FAIL -From" }
+  if ($To -ne "ALL" -and $Pillars -notcontains $To) { throw "FAIL -To" }
+  if (-not $Type) { throw "FAIL -Type" }
   if ([string]::IsNullOrWhiteSpace($Body)) { throw "FAIL empty -Body" }
-
-  $wait = Get-WaitDir
-  New-Item -ItemType Directory -Force -Path $wait | Out-Null
-  $name = "$(Get-Stamp)__${From}__${To}__${Type}.md"
-  $path = Join-Path $wait $name
+  $inbox = Get-InboxDir
+  New-Item -ItemType Directory -Force -Path $inbox | Out-Null
+  $path = Join-Path $inbox "$(Get-Stamp)__${From}__${To}__${Type}.md"
   $text = "from: $From`nto: $To`ntype: $Type`n`n$($Body.Trim())`n"
   [System.IO.File]::WriteAllText($path, $text, [System.Text.UTF8Encoding]::new($false))
   Write-Output $path
@@ -80,21 +77,24 @@ function Send-Bus {
 
 function Recv-Bus {
   $wait = Get-WaitDir
+  $inbox = Get-InboxDir
   Write-Output "odin-bus recv"
-  Write-Output "wait $wait"
-  Write-Output "Grok API: none"
+  Write-Output "inbox $inbox"
   if (-not (Test-Path -LiteralPath $wait)) {
     Write-Output "FAIL missing $wait"
     exit 2
   }
-  $hits = @(
-    Get-ChildItem -LiteralPath $wait -File -Filter "*.md" -ErrorAction SilentlyContinue
-  ) | Where-Object { $_.Name -notmatch '^(README|PROTOCOL)' } |
+  $hits = @()
+  foreach ($dir in @($inbox, $wait)) {
+    if (-not (Test-Path -LiteralPath $dir)) { continue }
+    $hits += Get-ChildItem -LiteralPath $dir -File -Filter "*.md" -ErrorAction SilentlyContinue
+  }
+  $hits = $hits |
+    Where-Object { $_.Name -notmatch '^(README|PROTOCOL)' } |
     Sort-Object LastWriteTime -Descending
-
   Write-Output "recv $($hits.Count)"
   if ($hits.Count -eq 0) {
-    Write-Output "FAIL no messages in 判断待ち"
+    Write-Output "FAIL no messages"
     exit 2
   }
   foreach ($f in $hits | Select-Object -First 20) {
