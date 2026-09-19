@@ -6,14 +6,18 @@ Live OS (chairman Desktop `XORA-BizDev`):
 
 - `リサーチ/XORA_ODIN運営OS_20260919.md`
 - `リサーチ/ODIN部署運用ルール_20260919.md`
+- `リサーチ/ODIN本線引継ぎ_ZEUS監視_20260919.md`
 - `CURSOR作業指示_ODIN組織引継ぎ_20260919.md`
 - `営業/判断待ち/ODIN指示_20260919.md`
 - `営業/判断待ち/ODIN指示_部署運用_20260919.md`
+- `営業/判断待ち/ODIN指示_本線接管_20260919.md`
 - KPI: `経理/KPI実測_*.md`（不在は FAIL）
 
 ## Identity
 
 ZEUS = Brain / monitor only. ODIN runs the **same** ZEUS mainline (1–4) from files. Do not invent roles or lanes. Do not message Grok bots. Dual-dispatch of X / 出品 / 公開ログイン is forbidden — those stay on Grok 公開ログイン if already in flight.
+
+ZEUS→ODIN tool: `python3 scripts/odin-ingest.py` + Cloud Agent follow-up. Drop slot: `inbox/zeus/`. ZEUS cannot type into local Cursor chat.
 
 | 呼称 | 実体 | このハーネスでの扱い |
 |---|---|---|

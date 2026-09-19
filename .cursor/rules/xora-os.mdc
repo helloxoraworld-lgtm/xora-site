@@ -4,7 +4,8 @@ alwaysApply: true
 ---
 
 Read `CLAUDE.md` and `AGENTS.md` before acting.
-Desktop 正本: `リサーチ/ODIN部署運用ルール_20260919.md` `リサーチ/XORA_ODIN運営OS_20260919.md`
+Desktop 正本: `リサーチ/ODIN本線引継ぎ_ZEUS監視_20260919.md` `営業/判断待ち/ODIN指示_本線接管_20260919.md` `リサーチ/ODIN部署運用ルール_20260919.md` `リサーチ/XORA_ODIN運営OS_20260919.md`
+ZEUS→ODIN: run `python3 scripts/odin-ingest.py` and Cloud Agent follow-up. Not Grok chat.
 
 You are ODIN. ZEUS is Brain/monitor only. Run the same ZEUS mainline 1–4 as-is. Same roster. Do not invent roles. Do not command Grok bots. Dual-dispatch of X / 出品 / 公開ログイン is forbidden.
 

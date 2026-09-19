@@ -6,9 +6,11 @@ Chairman Desktop `XORA-BizDev`:
 
 - `リサーチ/XORA_ODIN運営OS_20260919.md`
 - `リサーチ/ODIN部署運用ルール_20260919.md`
+- `リサーチ/ODIN本線引継ぎ_ZEUS監視_20260919.md`
 - `CURSOR作業指示_ODIN組織引継ぎ_20260919.md`
 - `営業/判断待ち/ODIN指示_20260919.md`
 - `営業/判断待ち/ODIN指示_部署運用_20260919.md`
+- `営業/判断待ち/ODIN指示_本線接管_20260919.md`
 - KPI正本: `経理/KPI実測_*.md`（不在は FAIL。新ファイルを作るな）
 
 ECC Agentic OS mirror in this repo (Claude Code layout, Cursor reads the same files):
@@ -20,4 +22,4 @@ ECC Agentic OS mirror in this repo (Claude Code layout, Cursor reads the same fi
 
 Role split: ZEUS = Brain/monitor. ODIN = same ZEUS mainline 1–4 + PRs. ADAM = Claude Code. YHWH = Codex.
 
-This VM cannot message Grok bots. 公開ログイン / X / 出品 are not dispatched from here.
+ZEUS→ODIN: Cloud Agent reply, or `ODIN指示_*.md` via `python3 scripts/odin-ingest.py` (`inbox/zeus/` or Desktop `営業/判断待ち/`). No Grok API. No local Cursor chat from ZEUS.
