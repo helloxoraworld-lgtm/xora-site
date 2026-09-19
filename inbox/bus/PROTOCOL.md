@@ -1,17 +1,27 @@
 # 四柱バス
 
-Claude Code（ADAM）・Codex（YHWH）・Grok Bot（ZEUS）・Cursor（ODIN）が**同じファイル**で指示を出し合う。Grok / Slack API は無い。
+Claude Code（ADAM）・Codex（YHWH）・Grok Bot（ZEUS）・Cursor（ODIN）が**同じフォルダ**で指示を出し合う。Grok / Slack API は無い。
+
+会長PCなら PowerShell が共通入口。`$env:USERPROFILE\Desktop\XORA-BizDev`（上書きは `$env:XORA_BIZDEV`）。
 
 | 柱 | 読み方 | 書き方 |
 |---|---|---|
-| ADAM | `python3 scripts/odin-bus.py recv` | `send --from ADAM` |
-| YHWH | 同じ | `send --from YHWH` |
-| ODIN | 同じ + Cloud Agent follow-up | `send --from ODIN` |
-| ZEUS | Desktop `営業/判断待ち/ODIN指示_*.md` を書く。recv が拾う | ローカルCursor欄には打てない |
+| ADAM | `.\scripts\odin-bus.ps1 recv` | `.\scripts\odin-bus.ps1 send -From ADAM -To ODIN -Type 指示 -Body "…"` |
+| YHWH | 同じ | `-From YHWH` |
+| ODIN ローカル | 同じ | `-From ODIN` |
+| ODIN Cloud | `python3 scripts/odin-bus.py recv` + follow-up | Desktop がこのVMに無いと FAIL |
+| ZEUS | PSは走らせない。`営業\判断待ち\ODIN指示_*.md` を書く | ローカルCursor欄には打てない |
+
+```powershell
+cd <repo or BizDev>
+.\scripts\odin-bus.ps1 recv
+.\scripts\odin-bus.ps1 send -From ADAM -To ALL -Type 残証 -Body "https://…"
+```
+
+Linux / Cloud:
 
 ```bash
 python3 scripts/odin-bus.py recv
-python3 scripts/odin-bus.py send --from ODIN --to ALL --type 残証 --body "https://…"
 ```
 
 type は `指示` / `残証` / `監視` だけ。本文はパスと URL。秘密・稼げる・旧電気・二重投下を書くな。
