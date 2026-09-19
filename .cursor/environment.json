@@ -1,0 +1,16 @@
+{
+  "name": "XORA static site",
+  "terminals": [
+    {
+      "name": "static-server",
+      "command": "python3 -m http.server 8000",
+      "description": "Serves the static XORA site over HTTP from the repo root. Open http://localhost:8000/ for the homepage, and pages such as /works.html, /services.html, /pricing.html, /demo/csv-merge.html and /ai-ops/index.html."
+    }
+  ],
+  "ports": [
+    {
+      "name": "web",
+      "port": 8000
+    }
+  ]
+}
