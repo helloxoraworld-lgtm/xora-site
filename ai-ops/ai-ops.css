@@ -1,0 +1,77 @@
+/*
+  /ai-ops/ only — first-view + mobile one-tap mailto.
+  Tokens and button look stay on common.css. No new color, no price table.
+*/
+
+.aiops-hero-cta {
+  margin-top: 28px;
+}
+
+.aiops-hero-cta p {
+  margin: 0;
+}
+
+.aiops-hero-cta .note {
+  margin-top: 12px;
+}
+
+.aiops-mailto {
+  min-height: 52px;
+  touch-action: manipulation;
+}
+
+.aiops-tapbar {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .page-ai-ops .page-intro {
+    padding: 36px 0 28px;
+  }
+
+  .page-ai-ops .page-intro h1 {
+    margin-bottom: 14px;
+  }
+
+  .page-ai-ops .page-lead {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .aiops-hero-cta {
+    margin-top: 22px;
+  }
+
+  .aiops-mailto {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+    min-height: 52px;
+  }
+
+  .aiops-tapbar {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(3, 8, 15, 0.94);
+    border-top: 1px solid var(--xora-border-faint);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  .page-ai-ops main {
+    padding-bottom: 88px;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .aiops-tapbar {
+    background: var(--xora-obsidian);
+  }
+}
