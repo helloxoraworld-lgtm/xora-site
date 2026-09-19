@@ -17,6 +17,7 @@
 
 .aiops-mailto {
   min-height: 52px;
+  touch-action: manipulation;
 }
 
 .aiops-tapbar {
@@ -62,13 +63,6 @@
     border-top: 1px solid var(--xora-border-faint);
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
-    transform: translateY(0);
-    transition: transform 0.2s ease;
-  }
-
-  .aiops-tapbar.is-hidden {
-    transform: translateY(110%);
-    pointer-events: none;
   }
 
   .page-ai-ops main {

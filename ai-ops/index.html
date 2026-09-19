@@ -27,7 +27,7 @@
 
 <link rel="icon" href="../assets/images/xora-symbol.svg?v=10" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/css/common.css?v=10">
-<link rel="stylesheet" href="ai-ops.css?v=1">
+<link rel="stylesheet" href="ai-ops.css?v=2">
 </head>
 <body class="page-ai-ops">
 
@@ -123,21 +123,33 @@
 
 </main>
 
-<aside class="aiops-tapbar is-hidden" aria-label="メールで問い合わせ">
+<aside class="aiops-tapbar" aria-label="メールで問い合わせ">
   <a class="btn btn-primary btn-lg aiops-mailto aiops-tapbar__btn" href="mailto:hello.xoraworld@gmail.com?subject=%E3%82%AA%E3%83%9A">件名「オペ」でメールする <span class="arrow">→</span></a>
 </aside>
 
 <script src="../assets/js/header.js?v=10"></script>
 <script>
 (function () {
-  var bar = document.querySelector(".aiops-tapbar");
-  var hero = document.querySelector(".aiops-hero-cta .aiops-mailto");
-  if (!bar || !hero || !("IntersectionObserver" in window)) return;
-  var io = new IntersectionObserver(function (entries) {
-    var vis = entries[0] && entries[0].isIntersecting;
-    bar.classList.toggle("is-hidden", vis);
-  }, { threshold: 0.6 });
-  io.observe(hero);
+  var MAILTO = "mailto:hello.xoraworld@gmail.com?subject=%E3%82%AA%E3%83%9A";
+  var LABEL = '件名「オペ」でメールする <span class="arrow">→</span>';
+  function retargetHeader() {
+    var header = document.getElementById("site-header");
+    if (!header) return false;
+    var links = header.querySelectorAll(".site-header__cta a, .site-mobile-menu__cta");
+    if (!links.length) return false;
+    Array.prototype.forEach.call(links, function (a) {
+      a.setAttribute("href", MAILTO);
+      a.innerHTML = LABEL;
+    });
+    return true;
+  }
+  if (retargetHeader()) return;
+  var header = document.getElementById("site-header");
+  if (!header) return;
+  var obs = new MutationObserver(function () {
+    if (retargetHeader()) obs.disconnect();
+  });
+  obs.observe(header, { childList: true, subtree: true });
 })();
 </script>
 <script>
