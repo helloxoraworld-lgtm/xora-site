@@ -22,4 +22,4 @@ ECC Agentic OS mirror in this repo (Claude Code layout, Cursor reads the same fi
 
 Role split: ZEUS = Brain/monitor. ODIN = same ZEUS mainline 1–4 + PRs. ADAM = Claude Code. YHWH = Codex.
 
-ZEUS→ODIN: Cloud Agent reply, or `ODIN指示_*.md` via `python3 scripts/odin-ingest.py` (`inbox/zeus/` or Desktop `営業/判断待ち/`). No Grok API. No local Cursor chat from ZEUS.
+四柱バス: `python3 scripts/odin-bus.py`（`inbox/bus/PROTOCOL.md`）。ADAM=Claude Code、YHWH=Codex、ODIN=Cursor、ZEUS=Desktop `ODIN指示_*.md` か Cloud Agent follow-up。Grok API なし。

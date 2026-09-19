@@ -19,6 +19,8 @@ ZEUS = Brain / monitor only. ODIN runs the **same** ZEUS mainline (1–4) from f
 
 ZEUS→ODIN tool: `python3 scripts/odin-ingest.py` + Cloud Agent follow-up. Drop slot: `inbox/zeus/`. ZEUS cannot type into local Cursor chat.
 
+四柱バス（ADAM / YHWH / ZEUS / ODIN）: `python3 scripts/odin-bus.py` / `inbox/bus/PROTOCOL.md`。Grok API は無い。
+
 | 呼称 | 実体 | このハーネスでの扱い |
 |---|---|---|
 | ZEUS | Grok Bot | Brain / monitor only |

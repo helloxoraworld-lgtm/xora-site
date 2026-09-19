@@ -68,6 +68,7 @@ def collect() -> list[Path]:
 
 
 def main() -> int:
+    print("also: python3 scripts/odin-bus.py recv")
     hits = collect()
     print("ODIN ingest")
     print("ZEUS→ODIN: Cloud Agent reply / ODIN指示_*.md")
