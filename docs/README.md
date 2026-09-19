@@ -15,6 +15,6 @@ ECC Agentic OS mirror in this repo (Claude Code layout, Cursor reads the same fi
 - `agents/` — 装備 + 参謀
 - `.claude/commands/` — `/audit` `/situation` `/hello-cta` `/proof`
 
-Role split: ZEUS = Brain/monitor. ADAM = Claude Code. YHWH = Codex. ODIN = Cursor PRs.
+Role split: ZEUS = Brain/monitor. ODIN = same ZEUS mainline 1–4 + PRs. ADAM = Claude Code. YHWH = Codex.
 
 This VM cannot message Grok bots. 公開ログイン / X / 出品 are not dispatched from here.

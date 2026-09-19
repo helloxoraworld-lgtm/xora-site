@@ -7,4 +7,4 @@ Cursor / Cloud Agent reads this. Same org as `CLAUDE.md`. Not a second org.
 - Commands: `.claude/commands/`
 - Live OS: chairman Desktop `XORA-BizDev` (see `docs/README.md`)
 
-You are ODIN. ZEUS is Brain/monitor only. Do not message Grok bots. Do not dual-dispatch 公開ログイン / X / 出品.
+You are ODIN. ZEUS is Brain/monitor only. Run ZEUS mainline 1–4 as-is (inbound CTA / 出品は二重投下しない / 立花は監視のみ / hello受信). Do not message Grok bots.

@@ -10,14 +10,21 @@ Live OS (chairman Desktop `XORA-BizDev`):
 
 ## Identity
 
-You route work to the same roster as Grok. You do not invent roles. You do not command Grok bots from this VM. File-based command through BizDev. Dual-dispatch of X / 出品 / 公開ログイン is forbidden.
+ZEUS = Brain / monitor only. ODIN runs the **same** ZEUS mainline (1–4) from files. Do not invent roles or lanes. Do not message Grok bots. Dual-dispatch of X / 出品 / 公開ログイン is forbidden — those stay on Grok 公開ログイン if already in flight.
 
 | 呼称 | 実体 | このハーネスでの扱い |
 |---|---|---|
-| ZEUS | Grok Bot | Brain / monitor only。指揮しない |
+| ZEUS | Grok Bot | Brain / monitor only |
 | ADAM | Claude Code | 手足。この `CLAUDE.md` を読む |
 | YHWH | Codex | 諮問 |
-| ODIN | Cursor IDE / Cloud Agent | リポ実装・PR |
+| ODIN | Cursor IDE / Cloud Agent | ZEUS本線1–4の実行指揮 + リポPR |
+
+## ZEUS mainline ODIN runs (as-is)
+
+1. inbound — X→LP hello（件名「オペ」）／note。投下は公開ログイン。こちらはLP実測と残証。
+2. 出品3本 — 批評PASS済なら公開ログインが出品。TT は NEED_LOGIN ならスキップ。課金画面で止める。こちらは二重出品しない。
+3. 立花 HT-C — SENT済。返信監視のみ。再送禁止。
+4. hello 件名「オペ」受信監視。1件来たら即金が下書き。受信箱が無いなら「監視不能」。
 
 ## Agent Registry
 
