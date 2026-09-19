@@ -23,3 +23,5 @@ ECC Agentic OS mirror in this repo (Claude Code layout, Cursor reads the same fi
 Role split: ZEUS = Brain/monitor. ODIN = same ZEUS mainline 1–4 + PRs. ADAM = Claude Code. YHWH = Codex.
 
 3人部屋: `営業/判断待ち/四柱会議.md`。入口 `scripts/AI協働コンソール.cmd`。ZEUS窓口は部屋の外。報告は `python3 scripts/odin-meet.py report`。
+
+新チャット引継ぎ: `営業/判断待ち/ODIN引継ぎ_新チャット_20260919.md`
