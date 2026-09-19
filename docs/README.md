@@ -1,15 +1,20 @@
 # ODIN pointer
 
-Live operating OS is **not** in this repo. Do not invent a second org here.
+Live operating OS is **not** invented here. Same org as Grok.
 
-It lives on chairman Desktop `XORA-BizDev`:
+Chairman Desktop `XORA-BizDev`:
 
 - `リサーチ/XORA_ODIN運営OS_20260919.md`
 - `CURSOR作業指示_ODIN組織引継ぎ_20260919.md`
 - `営業/判断待ち/ODIN指示_20260919.md`
 
-Role split (same org): ZEUS = Brain/monitor only. ODIN = run that mainline via those files + ship code PRs.
+ECC Agentic OS mirror in this repo (Claude Code layout, Cursor reads the same files):
 
-This VM cannot message Grok bots. Execution command is file-based through BizDev.
+- `CLAUDE.md` — kernel / roster
+- `AGENTS.md` — Cursor entry
+- `agents/` — 装備 + 参謀
+- `.claude/commands/` — `/audit` `/situation` `/hello-cta` `/proof`
 
-This repo’s primary code deliverable is the `/ai-ops/` hello conversion (mailto subject `オペ`).
+Role split: ZEUS = Brain/monitor. ADAM = Claude Code. YHWH = Codex. ODIN = Cursor PRs.
+
+This VM cannot message Grok bots. 公開ログイン / X / 出品 are not dispatched from here.
