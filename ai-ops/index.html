@@ -13,16 +13,23 @@
 <meta property="og:description" content="返信・請求・未入金・採用。下書きまでAI、送るボタンは自分。合うかだけ見るならメール件名「オペ」。料金表なし。">
 <meta property="og:url" content="https://helloxoraworld-lgtm.github.io/xora-site/ai-ops/">
 <meta property="og:image" content="https://helloxoraworld-lgtm.github.io/xora-site/assets/og-ai-ops.png">
+<meta property="og:image:secure_url" content="https://helloxoraworld-lgtm.github.io/xora-site/assets/og-ai-ops.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="返信漏れと「やったつもり」を、残るオペに — AIオペ | XORA">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="返信漏れと「やったつもり」を、残るオペに — AIオペ | XORA">
 <meta name="twitter:description" content="返信・請求・未入金・採用。下書きまでAI、送るボタンは自分。合うかだけ見るならメール件名「オペ」。料金表なし。">
 <meta name="twitter:image" content="https://helloxoraworld-lgtm.github.io/xora-site/assets/og-ai-ops.png">
+<meta name="twitter:image:alt" content="返信漏れと「やったつもり」を、残るオペに — AIオペ | XORA">
 
 <link rel="icon" href="../assets/images/xora-symbol.svg?v=10" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/css/common.css?v=10">
+<link rel="stylesheet" href="ai-ops.css?v=1">
 </head>
-<body>
+<body class="page-ai-ops">
 
 <header id="site-header" data-base="../" data-active=""></header>
 
@@ -33,6 +40,10 @@
       <p class="page-eyebrow"><span class="en">AI OPS</span>AIオペ</p>
       <h1>返信漏れと「やったつもり」を、残って動くオペに変える。</h1>
       <p class="page-lead">案件・DM・請求・採用応募が溢れて、手作業で止まっている個人事業主／小規模向け。必要なものだけ選んでください。</p>
+      <div class="aiops-hero-cta">
+        <p><a class="btn btn-primary btn-lg aiops-mailto" href="mailto:hello.xoraworld@gmail.com?subject=%E3%82%AA%E3%83%9A">件名「オペ」でメールする <span class="arrow">→</span></a></p>
+        <p class="note">件名は自動で「オペ」が入ります。合うかだけ見る。料金表なし。</p>
+      </div>
     </div>
   </section>
 
@@ -105,14 +116,30 @@
         <p>合うかどうかだけ見る。売り込みの電話はしない。<br>下書きまでAI、送る／契約／課金のボタンはあなた。</p>
       </div>
       <p><strong>今すぐ:</strong> hello.xoraworld@gmail.com に件名「オペ」とだけ送る。</p>
-      <p><a class="btn btn-primary btn-lg" href="mailto:hello.xoraworld@gmail.com?subject=%E3%82%AA%E3%83%9A">件名「オペ」でメールする <span class="arrow">→</span></a></p>
+      <p><a class="btn btn-primary btn-lg aiops-mailto" href="mailto:hello.xoraworld@gmail.com?subject=%E3%82%AA%E3%83%9A">件名「オペ」でメールする <span class="arrow">→</span></a></p>
       <p class="note">希望SKU（返信監視／請求／未入金／採用）があれば本文に1行。不要なら返信しなくて大丈夫。</p>
     </div>
   </section>
 
 </main>
 
+<aside class="aiops-tapbar is-hidden" aria-label="メールで問い合わせ">
+  <a class="btn btn-primary btn-lg aiops-mailto aiops-tapbar__btn" href="mailto:hello.xoraworld@gmail.com?subject=%E3%82%AA%E3%83%9A">件名「オペ」でメールする <span class="arrow">→</span></a>
+</aside>
+
 <script src="../assets/js/header.js?v=10"></script>
+<script>
+(function () {
+  var bar = document.querySelector(".aiops-tapbar");
+  var hero = document.querySelector(".aiops-hero-cta .aiops-mailto");
+  if (!bar || !hero || !("IntersectionObserver" in window)) return;
+  var io = new IntersectionObserver(function (entries) {
+    var vis = entries[0] && entries[0].isIntersecting;
+    bar.classList.toggle("is-hidden", vis);
+  }, { threshold: 0.6 });
+  io.observe(hero);
+})();
+</script>
 <script>
 if (location.hostname.indexOf("github.io") !== -1) {
   var gc = document.createElement("script");
