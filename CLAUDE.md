@@ -19,7 +19,8 @@ ZEUS = Brain / monitor only. ODIN runs the **same** ZEUS mainline (1–4) from f
 
 ZEUS→ODIN tool: `python3 scripts/odin-ingest.py` + Cloud Agent follow-up. Drop slot: `inbox/zeus/`. ZEUS cannot type into local Cursor chat.
 
-四柱バス（ADAM / YHWH / ZEUS / ODIN）: `python3 scripts/odin-bus.py` / `inbox/bus/PROTOCOL.md`。Grok API は無い。
+3人部屋（ADAM / YHWH / ODIN）: `営業/判断待ち/四柱会議.md`。ZEUSは入らない。  
+流れ: 3人協議→ODINが `odin-meet.py report` でZEUSへ残証。逆は ZEUS指示→ODINが会議へ落とす→3人→報告。
 
 | 呼称 | 実体 | このハーネスでの扱い |
 |---|---|---|

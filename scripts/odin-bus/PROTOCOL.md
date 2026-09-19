@@ -15,5 +15,14 @@ cd $env:USERPROFILE\Desktop\XORA-BizDev
 .\scripts\odin-bus.ps1 recv
 ```
 
+3人部屋: `営業\判断待ち\四柱会議.md`  
+入口: `AI協働コンソール.cmd`  
+ZEUS窓口: 部屋に入らない。ODIN報告は odin-bus。ZEUS提案は ODIN指示 → 会議へ。
+
+```powershell
+cd $env:USERPROFILE\Desktop\XORA-BizDev
+.\AI協働コンソール.cmd
+```
+
 ZEUSはPSを走らせない。`ODIN指示_*.md` を `営業\判断待ち` へ。
 Grok API なし。本文はパスとURL。公開ログイン PARK。
