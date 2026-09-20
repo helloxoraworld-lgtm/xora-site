@@ -1,15 +1,27 @@
 # ODIN pointer
 
-Live operating OS is **not** in this repo. Do not invent a second org here.
+Live operating OS is **not** invented here. Same org as Grok.
 
-It lives on chairman Desktop `XORA-BizDev`:
+Chairman Desktop `XORA-BizDev`:
 
 - `リサーチ/XORA_ODIN運営OS_20260919.md`
+- `リサーチ/ODIN部署運用ルール_20260919.md`
+- `リサーチ/ODIN本線引継ぎ_ZEUS監視_20260919.md`
 - `CURSOR作業指示_ODIN組織引継ぎ_20260919.md`
 - `営業/判断待ち/ODIN指示_20260919.md`
+- `営業/判断待ち/ODIN指示_部署運用_20260919.md`
+- `営業/判断待ち/ODIN指示_本線接管_20260919.md`
+- KPI正本: `経理/KPI実測_*.md`（不在は FAIL。新ファイルを作るな）
 
-Role split (same org): ZEUS = Brain/monitor only. ODIN = run that mainline via those files + ship code PRs.
+ECC Agentic OS mirror in this repo (Claude Code layout, Cursor reads the same files):
 
-This VM cannot message Grok bots. Execution command is file-based through BizDev.
+- `CLAUDE.md` — kernel / roster
+- `AGENTS.md` — Cursor entry
+- `agents/` — 装備 + 参謀
+- `.claude/commands/` — `/audit` `/situation` `/hello-cta` `/proof` `/staff` `/mainline`
 
-This repo’s primary code deliverable is the `/ai-ops/` hello conversion (mailto subject `オペ`).
+Role split: ZEUS = Brain/monitor. ODIN = same ZEUS mainline 1–4 + PRs. ADAM = Claude Code. YHWH = Codex.
+
+3人部屋: `営業/判断待ち/四柱会議.md`。入口 `scripts/AI協働コンソール.cmd`。ZEUS窓口は部屋の外。報告は `python3 scripts/odin-meet.py report`。
+
+新チャット引継ぎ: `営業/判断待ち/ODIN引継ぎ_新チャット_20260919.md`
