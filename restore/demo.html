@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>修理前・後の操作デモ — XORA Restore</title>
+  <meta name="description" content="スマホの予約ボタンにお知らせが重なる不具合を、故障モードと修理後で比較するローカル操作デモ。実予約・決済・情報送信は行いません。">
+  <link rel="canonical" href="https://helloxoraworld-lgtm.github.io/xora-site/restore/demo.html">
+  <link rel="stylesheet" href="restore.css">
+  <script src="demo.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">デモ本文へ移動</a>
+  <header class="site-header wrap"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">R</span><span>XORA <strong>Restore</strong></span></a><nav aria-label="デモメニュー"><a href="index.html">サービスへ戻る <span aria-hidden="true">←</span></a></nav></header>
+  <main id="main" class="wrap demo-main">
+    <section class="demo-intro"><p class="eyebrow">INTERACTIVE DEMO / ローカル模擬画面</p><h1>同じボタンを、<br><span>修理前と後で。</span></h1><p class="lead">スマホで「お知らせ」が予約ボタンに重なる不具合を再現します。<br>状態を切り替え、予約ボタンまたは操作テストを押して確かめてください。</p><p class="demo-disclaimer"><strong>説明用に作った架空の画面です。</strong>実案件の成功実績ではありません。個人情報の入力、実予約、決済、外部送信はありません。</p></section>
+    <noscript><p class="notice">デモの切替にはJavaScriptが必要です。この画面は模擬表示で、予約や情報送信はできません。</p></noscript>
+    <section class="demo-workspace" data-demo aria-labelledby="demo-title">
+      <div class="demo-controls"><h2 id="demo-title">不具合を再現・比較</h2><div class="control-group"><p id="mode-label">画面の状態</p><div class="segmented" role="group" aria-labelledby="mode-label"><button type="button" data-mode="broken" aria-pressed="true" aria-controls="demo-stage">故障モード</button><button type="button" data-mode="fixed" aria-pressed="false" aria-controls="demo-stage">修理後</button></div></div><div class="control-group"><p id="viewport-label">閲覧条件</p><div class="segmented" role="group" aria-labelledby="viewport-label"><button type="button" data-viewport="mobile" aria-pressed="true" aria-controls="demo-stage">スマホ幅</button><button type="button" data-viewport="desktop" aria-pressed="false" aria-controls="demo-stage">PC幅</button></div></div><p id="mode-explanation">スマホ幅では固定のお知らせがボタンを覆い、押せなくなります。</p><button class="button button-primary" type="button" id="run-test">操作テストを実行 <span aria-hidden="true">→</span></button><button class="text-button" type="button" id="reset-demo">最初の状態に戻す</button><p class="muted">キーボードでも切替と操作テストができます。修理後は予約ボタンへTabで移動してEnterでも試せます。</p></div>
+      <div class="demo-preview"><div class="preview-caption"><span id="preview-label">スマホ幅 / 故障モード</span><span class="tag">送信なし</span></div><div class="demo-stage" id="demo-stage" data-mode="broken" data-viewport="mobile"><div class="mock-site"><header class="mock-header"><strong>STUDIO / SAMPLE</strong><span>模擬サイト</span></header><div class="mock-body"><p class="mock-eyebrow">テスト用の予約画面</p><h3>サイト相談</h3><p>この画面は操作を確かめるためのデモです。予約枠や料金は実際の提供条件ではありません。</p><div class="mock-service"><span>テスト用メニュー</span><strong>30分の相談（デモ）</strong><span>入力情報・支払いなし</span></div><div class="mock-booking-zone"><div class="mock-notice" id="mock-obstruction"><strong>お知らせ（デモ）</strong><span>固定表示が予約ボタンと重なっています</span></div><button class="mock-booking-button" id="booking-button" type="button">予約を進める（デモ） <span aria-hidden="true">→</span></button></div><div class="mock-result" id="mock-confirmation" hidden><strong>デモの確認画面に進みました</strong><p>実予約・決済・データ送信は行っていません。</p></div></div><footer class="mock-footer">LOCAL MOCK · データ送信なし</footer></div></div></div>
+    </section>
+    <section class="test-results" aria-labelledby="result-heading"><div class="result-heading"><p class="eyebrow">TEST RESULT</p><h2 id="result-heading">操作の結果</h2></div><p class="test-result" id="test-result" role="status" aria-live="polite" aria-atomic="true">未実行：画面の状態を選び、操作テストを押してください。</p><p class="muted" id="geometry-result">このデモでは表示の重なりと、確認画面への遷移を比較します。</p></section>
+    <section class="demo-comparison"><div class="card"><p class="eyebrow">BEFORE</p><h2>端末が変わると、止まる。</h2><p>故障モードはスマホ幅でお知らせを絶対配置し、ボタンと重ねています。PC幅では重ならず、押せる状態です。</p></div><div class="card"><p class="eyebrow">AFTER</p><h2>お知らせとボタンを分ける。</h2><p>修理後はお知らせを通常のレイアウトに戻し、ボタンの前に余白を確保。スマホ幅・PC幅の両方で操作できます。</p></div></section>
+    <section class="demo-cta"><h2>自社サイトでも、同じ症状がありますか？</h2><p>実際の対応可否は、お客様のソースと改修許可を確認して判断します。診断だけでは料金は発生しません。</p><a class="button button-primary" href="index.html#consult">不具合の相談へ <span aria-hidden="true">→</span></a></section>
+  </main>
+  <footer class="site-footer wrap"><a class="brand" href="index.html">XORA <strong>Restore</strong></a><p>架空の操作デモ・実予約なし</p></footer>
+</body>
+</html>
