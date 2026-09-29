@@ -1,1 +1,0 @@
-import{t as e}from"./preload-helper.AC3xf5M2.js";window.matchMedia(`(prefers-reduced-motion: reduce)`).matches||e(async()=>{let{initLenis:e}=await import(`./lenis-init.CszkMS6m.js`);return{initLenis:e}},[]).then(({initLenis:e})=>e()).catch(e=>console.warn(`[lenis] load skipped:`,e));
