@@ -1105,8 +1105,8 @@
     this._maskIdle = true;
     if (this.fallbackImg) this.fallbackImg.style.setProperty("--hand-mask-min", "1");
 
-    // v5: 検証コード用に「各層の代表インデックス」を拾っておく。firstLayerA/B/TipHumanIndexは
-    // 同じgroup(human)に絞っているので、check.py側がtuningの違い(human/aiで基準値が異なる)に
+    // v5: 検証用に「各層の代表インデックス」を拾っておく。firstLayerA/B/TipHumanIndexは
+    // 同じgroup(human)に絞っているので、tuningの違い(human/aiで基準値が異なる)に
     // 惑わされず「同じ手の中でA/B/指先の反応がどう違うか」を素直に比較できる。
     var layerACount = 0,
       tipCount = 0;
