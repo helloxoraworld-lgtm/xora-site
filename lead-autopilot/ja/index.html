@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XORA Lead-to-CRM Autopilot — n8n振り分け＋人が承認するAI下書き</title>
+<meta name="description" content="n8nでリード受付→仕分け→通知→CRM/Sheets。構築$790、AI返信下書き込み$1,490（送信前に人が1通ずつ承認）、保守$190/月。成約保証なし。">
+<link rel="canonical" href="https://helloxoraworld-lgtm.github.io/xora-site/lead-autopilot/ja/">
+<style>
+  :root { --bg:#0f1115; --card:#181b22; --text:#e8e9ee; --muted:#9aa0ae; --accent:#ffdc50; --line:#2a2e38; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
+  a { color:var(--accent); }
+  .wrap { max-width:980px; margin:0 auto; padding:28px 20px 80px; }
+  header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:28px; flex-wrap:wrap; }
+  .brand { font-weight:700; letter-spacing:.04em; }
+  .lang a { color:var(--muted); text-decoration:none; margin-left:10px; font-size:.9rem; }
+  .lang a.active { color:var(--accent); }
+  h1 { font-size:clamp(1.7rem, 4vw, 2.5rem); line-height:1.15; margin:0 0 12px; }
+  .lead { color:var(--muted); font-size:1.05rem; max-width:42rem; }
+  .cta-row { display:flex; flex-wrap:wrap; gap:12px; margin:20px 0 8px; }
+  .btn { display:inline-block; text-decoration:none; padding:12px 18px; border-radius:10px; font-weight:650; }
+  .btn-primary { background:var(--accent); color:#151515; }
+  .btn-ghost { border:1px solid var(--line); color:var(--text); }
+  .note { color:var(--muted); font-size:.88rem; margin:10px 0 28px; }
+  h2 { margin:40px 0 12px; font-size:1.3rem; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; }
+  .card.featured { border-color:#5a5230; }
+  .price { font-size:1.75rem; font-weight:750; margin:8px 0; }
+  .price span { font-size:.9rem; color:var(--muted); font-weight:500; }
+  ul { margin:8px 0 0; padding-left:1.1rem; color:var(--muted); }
+  li { margin:6px 0; }
+  footer { margin-top:48px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:.9rem; }
+  .flow { margin:20px 0; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; overflow-x:auto; }
+  .flow .label { font-size:.8rem; color:var(--muted); margin-bottom:12px; letter-spacing:.06em; }
+  .flow-svg { width:100%; max-width:900px; height:auto; display:block; }
+  .flow-steps { display:none; }
+  @media (max-width:640px) {
+    .flow-svg { display:none; }
+    .flow-steps { display:grid; gap:10px; }
+    .flow-steps .step { background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:12px 14px; font-size:.92rem; }
+    .flow-steps .arrow { color:var(--accent); text-align:center; font-size:.85rem; }
+  }
+</style></head><body><div class="wrap">
+<header><div class="brand">XORA · Lead-to-CRM Autopilot</div><div class="lang"><a href="../">EN</a><a class="active" href="./">JA</a></div></header>
+<h1>リードを受け取り、振り分け、記録し、下書きまで。送信ボタンは人が押す。</h1>
+<p class="lead">フォーム・DM・メールのリードを人手で逃している個人事業・小規模チーム向け。<strong>n8n</strong>で「受付 → 仕分け → 通知 → CRM/Sheets → 任意のAI返信下書き（送信前に人が承認）」をつなぎます。</p>
+<div class="cta-row"><a class="btn btn-primary" href="../../contact.html">相談する</a><a class="btn btn-ghost" href="#pricing">料金を見る</a></div>
+<p class="note"><strong>正直に：</strong>パッケージ化したのは新しいサービスです（2026-10-05時点）。自動化の売上実績は主張しません。自動化するのは振り分けと下書きであり、成約は保証しません。ドライラン後に書面で依頼しない限り、AIが勝手に送信することはありません。</p>
+
+<div class="flow" id="flow">
+  <div class="label">流れの例（example flow）</div>
+  <svg class="flow-svg" viewBox="0 0 880 140" role="img" aria-label="例：フォームまたはメール → 仕分け → Slack通知 → CRMまたはSheet → AI下書き → 人が承認して返信">
+    <defs>
+      <marker id="arrj" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#ffdc50"/></marker>
+    </defs>
+    <rect x="8" y="36" width="108" height="52" rx="10" fill="#0f1115" stroke="#2a2e38"/>
+    <text x="62" y="58" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">フォーム/メール</text>
+    <text x="62" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">/ Webhook</text>
+    <line x1="116" y1="62" x2="148" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arrj)"/>
+    <rect x="152" y="36" width="100" height="52" rx="10" fill="#0f1115" stroke="#2a2e38"/>
+    <text x="202" y="66" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">仕分け</text>
+    <line x1="252" y1="62" x2="284" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arrj)"/>
+    <rect x="288" y="36" width="108" height="52" rx="10" fill="#0f1115" stroke="#2a2e38"/>
+    <text x="342" y="58" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">通知</text>
+    <text x="342" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">Slack / Notion</text>
+    <line x1="396" y1="62" x2="428" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arrj)"/>
+    <rect x="432" y="36" width="108" height="52" rx="10" fill="#0f1115" stroke="#2a2e38"/>
+    <text x="486" y="58" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">CRM / Sheet</text>
+    <text x="486" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">＋ステータス</text>
+    <line x1="540" y1="62" x2="572" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arrj)"/>
+    <rect x="576" y="36" width="100" height="52" rx="10" fill="#0f1115" stroke="#5a5230"/>
+    <text x="626" y="58" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">AI下書き</text>
+    <text x="626" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">（任意）</text>
+    <line x1="676" y1="62" x2="708" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arrj)"/>
+    <rect x="712" y="36" width="152" height="52" rx="10" fill="#0f1115" stroke="#ffdc50"/>
+    <text x="788" y="58" text-anchor="middle" fill="#ffdc50" font-size="12" font-family="system-ui,sans-serif">人が承認</text>
+    <text x="788" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">してから送信</text>
+  </svg>
+  <div class="flow-steps">
+    <div class="step">1. フォーム / メール / Webhook</div>
+    <div class="arrow">↓</div>
+    <div class="step">2. 仕分け</div>
+    <div class="arrow">↓</div>
+    <div class="step">3. 通知（Slack / Notion）</div>
+    <div class="arrow">↓</div>
+    <div class="step">4. CRM / Sheet ＋ステータス</div>
+    <div class="arrow">↓</div>
+    <div class="step">5. AI下書き（任意）</div>
+    <div class="arrow">↓</div>
+    <div class="step">6. 人が承認 → 返信送信</div>
+  </div>
+</div>
+
+<h2 id="pricing">料金</h2>
+<div class="grid">
+<div class="card"><div>構築</div><div class="price">$790 <span>USD</span></div><ul><li>n8nフロー1〜2本：フォーム/メール/Webhook → Slack/Notion/Sheets等 → ステータス</li><li>運用チェックリスト＋テスト録画 · 修正1回</li><li>アクセスとヒアリング後、目安7〜14日</li></ul></div>
+<div class="card featured"><div>構築＋AI返信下書き · おすすめ</div><div class="price">$1,490 <span>USD</span></div><ul><li>構築のすべて</li><li>トーンに沿ったLLM下書き</li><li><strong>AIが下書き、送信前に人が1通ずつ承認</strong></li></ul></div>
+<div class="card"><div>任意の保守</div><div class="price">$190 <span>/ 月</span></div><ul><li>軽微な監視・調整・月次チェック</li><li>いつでも解約可</li></ul></div>
+</div>
+<p class="note">支払い：直販は Wise で<strong>着手金50%</strong>／納品時50%。Freelancer経由はマイルストーン。</p>
+
+<h2>つなぐもの</h2>
+<div class="grid">
+<div class="card"><strong>受付</strong><p class="note" style="margin:8px 0 0">Webフォーム、Gmail、Webhookなど、すでにお使いの入口。</p></div>
+<div class="card"><strong>通知</strong><p class="note" style="margin:8px 0 0">Slack、Notion、メールなど、すぐ気づける先。</p></div>
+<div class="card"><strong>記録</strong><p class="note" style="margin:8px 0 0">Google Sheets、Notion DB、HubSpot無料枠、またはご指定の簡易CRM。</p></div>
+<div class="card"><strong>下書き（任意）</strong><p class="note" style="margin:8px 0 0">トーンに沿ったLLM下書き。標準ではブラインド自動送信しません。</p></div>
+</div>
+<p class="note">特殊なCRMや独自APIは別見積もりになることがあります。n8nの認証情報はお客様が所有し、本番シークレットは長期保管しません。</p>
+
+<h2>納品の流れ</h2>
+<div class="grid">
+<div class="card"><strong>1. アクセス＋ヒアリング</strong><p class="note" style="margin:8px 0 0">ツール共有と短いキックオフ（通話または非同期）。</p></div>
+<div class="card"><strong>2. 着手金50%</strong><p class="note" style="margin:8px 0 0">Wise請求書またはFreelancerマイルストーン。</p></div>
+<div class="card"><strong>3. 構築＋ドライラン</strong><p class="note" style="margin:8px 0 0">フローを組み、サンプルでテストし、お客様が承認。</p></div>
+<div class="card"><strong>4. 引き渡し</strong><p class="note" style="margin:8px 0 0">残り50%の後、手順書・チェックリスト・録画。</p></div>
+</div>
+
+<h2>このサービスでないもの</h2>
+<ul>
+<li>成約保証やリード獲得代行ではありません。</li>
+<li>標準ではAIの完全自動送信ではありません（ドライラン後に書面で依頼した場合を除く）。</li>
+<li>商品・オファー・営業判断の代わりにはなりません。</li>
+<li>架空の実績や成果数値はありません。</li>
+</ul>
+
+<div class="card" style="margin-top:24px"><strong>神﨑隆聖（Ryusei Kanzaki）· XORA</strong><p class="note" style="margin:8px 0 0"><a href="../../contact.html">問い合わせ</a> または Freelancer。</p></div>
+<footer><p>© 2026 XORA.</p><p><a href="../../">← XORAサイト</a></p></footer>
+</div></body></html>
