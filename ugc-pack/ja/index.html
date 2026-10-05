@@ -1,112 +1,87 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>XORA UGCパック — AI商品写真＋ショート動画</title>
-<meta name="description" content="Shopify / Etsy / Amazon / Tokopedia向けのAI商品写真と縦型クリップ。Starter $190 · Standard $490 · Pro $990。">
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XORA Motion Ad Pack — スマホの商品写真を縦型広告に</title>
+<meta name="description" content="スマホの商品写真からAIスタジオ風スチールを作り、動き・字幕・ナレーション付き9:16縦型広告に編集。Starter $120（2本）、Pack $250（5本・7日）、Pro $490（12本）。成果保証なし。">
 <link rel="canonical" href="https://helloxoraworld-lgtm.github.io/xora-site/ugc-pack/ja/">
 <style>
-  * { box-sizing: border-box; }
-  body { margin: 0; font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: #1a1a1a; font-size: 16px; line-height: 1.5; background: #fff; }
-  a { color: #1a1a1a; }
-  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 20px 80px; }
-  header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
-  .brand { font-weight: 700; letter-spacing: .02em; }
-  .lang a { color: #555; text-decoration: none; margin-left: 12px; font-size: .95rem; }
-  .lang a.active { color: #1a1a1a; font-weight: 700; }
-  h1 { font-size: clamp(1.6rem, 4vw, 2.15rem); line-height: 1.2; margin: 0 0 10px; }
-  .lead { margin: 0; color: #333; max-width: 40rem; }
-  .cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 8px; }
-  .btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; padding: 12px 18px; border-radius: 4px; font-weight: 700; min-height: 48px; touch-action: manipulation; }
-  .btn-primary { background: #1a1a1a; color: #fff; }
-  .btn-ghost { border: 1px solid #bbb; color: #1a1a1a; background: #fff; }
-  .note { margin: 10px 0 0; color: #555; font-size: .92rem; font-style: italic; }
-  h2 { font-size: 1.05rem; margin: 32px 0 10px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
-  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .card { border: 1px solid #bbb; border-radius: 4px; padding: 14px; background: #fff; }
-  .card.featured { border-color: #1a1a1a; border-width: 2px; }
-  .price { font-weight: 700; font-size: 1.35rem; margin: 6px 0; }
-  .price span { font-weight: 500; font-size: .9rem; color: #555; }
-  ul { margin: 8px 0 0; padding-left: 18px; }
-  li { margin: 4px 0; }
-  .samples { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-  .samples figure { margin: 0; border: 1px solid #bbb; border-radius: 4px; overflow: hidden; background: #f4f4f4; }
-  .samples img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
-  .caption { margin: 8px 0 0; font-size: .8rem; color: #555; font-style: normal; }
-  footer { margin-top: 36px; border-top: 1px solid #ccc; padding-top: 12px; }
-  @media (max-width: 800px) {
-    .samples { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 640px) {
-    .grid, .samples { grid-template-columns: 1fr; }
-    .cta-row { flex-direction: column; }
-    .btn { width: 100%; }
-  }
-</style>
-</head>
-<body>
-<div class="wrap">
-<header>
-  <div class="brand">XORA · UGCパック</div>
-  <div class="lang"><a href="../">EN</a><a class="active" href="./">JA</a></div>
-</header>
+  :root { --bg:#0f1115; --card:#181b22; --text:#e8e9ee; --muted:#9aa0ae; --accent:#ffdc50; --line:#2a2e38; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
+  a { color:var(--accent); }
+  .wrap { max-width:980px; margin:0 auto; padding:28px 20px 80px; }
+  header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:28px; flex-wrap:wrap; }
+  .brand { font-weight:700; letter-spacing:.04em; }
+  .lang a { color:var(--muted); text-decoration:none; margin-left:10px; font-size:.9rem; }
+  .lang a.active { color:var(--accent); }
+  h1 { font-size:clamp(1.7rem, 4vw, 2.5rem); line-height:1.15; margin:0 0 12px; }
+  .lead { color:var(--muted); font-size:1.05rem; max-width:42rem; }
+  .cta-row { display:flex; flex-wrap:wrap; gap:12px; margin:20px 0 8px; }
+  .btn { display:inline-block; text-decoration:none; padding:12px 18px; border-radius:10px; font-weight:650; }
+  .btn-primary { background:var(--accent); color:#151515; }
+  .btn-ghost { border:1px solid var(--line); color:var(--text); }
+  .note { color:var(--muted); font-size:.88rem; margin:10px 0 28px; }
+  h2 { margin:40px 0 12px; font-size:1.3rem; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; }
+  .card.featured { border-color:#5a5230; }
+  .price { font-size:1.75rem; font-weight:750; margin:8px 0; }
+  .price span { font-size:.9rem; color:var(--muted); font-weight:500; }
+  ul { margin:8px 0 0; padding-left:1.1rem; color:var(--muted); }
+  li { margin:6px 0; }
+  .hero-video { margin:24px 0; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; max-width:360px; }
+  .hero-video video { width:100%; display:block; aspect-ratio:9/16; background:#000; }
+  .hero-video .cap { font-size:.8rem; color:var(--muted); padding:10px 12px; }
+  .samples { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; }
+  .samples figure { margin:0; background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .samples img { width:100%; aspect-ratio:1/1; object-fit:cover; display:block; background:#222; }
+  .samples figcaption { font-size:11px; color:var(--muted); padding:8px 10px; }
+  footer { margin-top:48px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:.9rem; }
+  .samples figure.pair-label { display:none; }
+</style></head><body><div class="wrap">
+<header><div class="brand">XORA · Motion Ad Pack</div><div class="lang"><a href="../">EN</a><a class="active" href="./">JA</a></div></header>
+<h1>スマホの商品写真を、縦型広告に。</h1>
+<p class="lead">商品のスマホ写真を数枚送ってもらえれば、AIでスタジオ風のスチールを作り、動き・字幕・ナレーション付きの9:16広告に編集します。Meta・TikTok・Reels向けです。</p>
+<div class="cta-row"><a class="btn btn-primary" href="../../contact.html">相談する</a><a class="btn btn-ghost" href="#pricing">料金を見る</a></div>
+<p class="note"><strong>正直に：</strong>新しいサービスで、2026-10-05時点で広告の納品実績はありません。ROASや売上の約束はしません。動きはスチールの編集で生成動画ではなく、人物も出てきません。</p>
 
-<h1>スマホ撮りのままにしない、商品写真と縦型クリップ。</h1>
-<p class="lead">Shopify / Etsy / Amazon / Tokopedia向け。カタログ静止画＋9:16縦動画。</p>
-<div class="cta-row">
-  <a class="btn btn-primary" href="mailto:hello.xoraworld@gmail.com">相談する</a>
-  <a class="btn btn-ghost" href="#pricing">料金を見る</a>
+<div class="hero-video">
+  <video controls playsinline preload="metadata" poster="../samples/motion_ad_poster.jpg">
+    <source src="../samples/motion_ad_sample_v2.mp4" type="video/mp4">
+  </video>
+  <div class="cap">コンセプトサンプル（15秒・9:16）。架空の商品です。「ビフォー」のスマホ写真はデモ用に再現したもので、実際の注文ではお客様自身の写真がビフォーになります。</div>
 </div>
-<p class="note">ギャラリーは<strong>AIコンセプトサンプル</strong>（架空商品・Pollinations）。納品はAI生成＋人確認。2026-10-05時点でUGC過去クライアントはありません。</p>
 
 <h2 id="pricing">料金</h2>
 <div class="grid">
-  <div class="card">
-    <div>Starter</div>
-    <div class="price">$190 <span>USD</span></div>
-    <ul>
-      <li>画像10枚</li>
-      <li>修正1回 · 3〜5営業日</li>
-    </ul>
-  </div>
-  <div class="card featured">
-    <div>Standard · おすすめ</div>
-    <div class="price">$490 <span>USD</span></div>
-    <ul>
-      <li>画像25枚＋縦動画3本</li>
-      <li>修正2回 · 5〜7営業日</li>
-    </ul>
-  </div>
-  <div class="card">
-    <div>Pro</div>
-    <div class="price">$990 <span>USD</span></div>
-    <ul>
-      <li>画像50枚＋動画8本＋コピー</li>
-      <li>7〜10営業日</li>
-    </ul>
-  </div>
+<div class="card"><div>Starter</div><div class="price">$120 <span>USD</span></div><ul><li>縦型広告 <strong>2本</strong></li><li>修正1回 · 7日</li></ul></div>
+<div class="card featured"><div>Pack · おすすめ</div><div class="price">$250 <span>USD</span></div><ul><li>縦型広告 <strong>5本</strong></li><li>修正2回 · <strong>7日</strong></li></ul></div>
+<div class="card"><div>Pro</div><div class="price">$490 <span>USD</span></div><ul><li>縦型広告 <strong>12本</strong>（冒頭の一言を変えたフック違いを含む）</li><li>修正2回 · 7〜10日</li></ul></div>
 </div>
-<p class="note">Freelancerマイルストーン、またはWise着手50%。</p>
+<p class="note">1本約10〜15秒・9:16、焼き込み字幕とAIナレーション付き（英語。日本語も対応可）。使用したスタジオ風スチールも納品します。支払い：Wiseで<strong>着手金50%</strong>、最終データ前に残り50%（またはFreelancerのマイルストーン）。</p>
 
-<h2>コンセプトサンプル</h2>
+<h2>ビフォー → アフター（コンセプト）</h2>
 <div class="samples">
-  <figure><img src="../samples/hero_serum_marble.jpg" alt="白い大理石の上のアンバーセラム（AI生成サンプル）" width="1280" height="720"></figure>
-  <figure><img src="../samples/hero_candle_lifestyle.jpg" alt="リネンのソファに置いたソイキャンドル（AI生成サンプル）" width="1280" height="720"></figure>
-  <figure><img src="../samples/hero_sneaker_pastel.jpg" alt="パステル背景の白いスニーカー（AI生成サンプル）" width="1280" height="720"></figure>
-  <figure><img src="../samples/hero_jewelry_flatlay.jpg" alt="ベージュの布の上のゴールドジュエリー（AI生成サンプル）" width="1280" height="720"></figure>
-</div>
-<p class="caption">AI-generated sample · XORA</p>
-
-<div class="card" style="margin-top:24px">
-  <strong>神﨑隆聖 · XORA</strong>
-  <p class="note"><a href="mailto:hello.xoraworld@gmail.com">hello.xoraworld@gmail.com</a></p>
+  <figure><img src="../samples/before_serum_simulated.jpg" alt="美容液・スマホ写真（再現）" loading="lazy"><figcaption>ビフォー · スマホ写真（再現）</figcaption></figure>
+  <figure><img src="../samples/hero_serum_marble.jpg" alt="美容液・AIスタジオスチール" loading="lazy"><figcaption>アフター · AIスタジオスチール</figcaption></figure>
+  <figure><img src="../samples/before_candle_simulated.jpg" alt="キャンドル・スマホ写真（再現）" loading="lazy"><figcaption>ビフォー · スマホ写真（再現）</figcaption></figure>
+  <figure><img src="../samples/hero_candle_lifestyle.jpg" alt="キャンドル・AIスタジオスチール" loading="lazy"><figcaption>アフター · AIスタジオスチール</figcaption></figure>
 </div>
 
-<footer>
-  <p><strong>XORA</strong> — 神﨑隆聖 · hello.xoraworld@gmail.com</p>
-  <p><a href="../../">← XORAサイト</a></p>
-</footer>
+<h2>流れ</h2>
+<div class="grid">
+<div class="card"><strong>1. 写真を送る</strong><p class="note" style="margin:8px 0 0">ショップURL＋商品ごとにスマホ写真1〜3枚。背景は問いません。</p></div>
+<div class="card"><strong>2. 着手金50%</strong><p class="note" style="margin:8px 0 0">Wise請求書（またはFreelancerマイルストーン）。</p></div>
+<div class="card"><strong>3. 確認</strong><p class="note" style="margin:8px 0 0">商品の見た目が正しいかこちらで確認し、その後お客様が確認・修正依頼。</p></div>
+<div class="card"><strong>4. 納品</strong><p class="note" style="margin:8px 0 0">残り50%の後、9:16のMP4とスタジオ風スチール。</p></div>
 </div>
-</body>
-</html>
+
+<h2>このサービスでないもの</h2>
+<ul>
+<li>クリエイターやインフルエンサーの投稿ではなく、顔出しや人物も入りません。</li>
+<li>生成動画ではありません。動きはスチールへのカメラの寄り・ワイプ・カットです。</li>
+<li>広告成果や審査通過は約束しません。AIスチールではラベルの細かい文字が崩れることがあり、直すか残金の支払い前にお伝えします。</li>
+</ul>
+
+<div class="card" style="margin-top:24px"><strong>神﨑隆聖（Ryusei Kanzaki）· XORA</strong><p class="note" style="margin:8px 0 0"><a href="../../contact.html">問い合わせ</a> または Freelancer。</p></div>
+<footer><p>© 2026 XORA.</p><p><a href="../../">← XORAサイト</a></p></footer>
+</div></body></html>
