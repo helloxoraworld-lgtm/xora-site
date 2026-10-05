@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XORA Lead-to-CRM Autopilot — n8n routing + human-approved AI drafts</title>
+<meta name="description" content="n8n Lead-to-CRM Autopilot: form/email/webhook → classify → notify → CRM/Sheet. Build $790; with AI reply drafts $1,490 (person approves every reply). Upkeep $190/mo. No close guarantee.">
+<link rel="canonical" href="https://helloxoraworld-lgtm.github.io/xora-site/lead-autopilot/">
+<style>
+  :root { --bg:#0f1115; --card:#181b22; --text:#e8e9ee; --muted:#9aa0ae; --accent:#ffdc50; --line:#2a2e38; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
+  a { color:var(--accent); }
+  .wrap { max-width:980px; margin:0 auto; padding:28px 20px 80px; }
+  header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:28px; flex-wrap:wrap; }
+  .brand { font-weight:700; letter-spacing:.04em; }
+  .lang a { color:var(--muted); text-decoration:none; margin-left:10px; font-size:.9rem; }
+  .lang a.active { color:var(--accent); }
+  h1 { font-size:clamp(1.7rem, 4vw, 2.5rem); line-height:1.15; margin:0 0 12px; }
+  .lead { color:var(--muted); font-size:1.05rem; max-width:42rem; }
+  .cta-row { display:flex; flex-wrap:wrap; gap:12px; margin:20px 0 8px; }
+  .btn { display:inline-block; text-decoration:none; padding:12px 18px; border-radius:10px; font-weight:650; }
+  .btn-primary { background:var(--accent); color:#151515; }
+  .btn-ghost { border:1px solid var(--line); color:var(--text); }
+  .note { color:var(--muted); font-size:.88rem; margin:10px 0 28px; }
+  h2 { margin:40px 0 12px; font-size:1.3rem; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; }
+  .card.featured { border-color:#5a5230; }
+  .price { font-size:1.75rem; font-weight:750; margin:8px 0; }
+  .price span { font-size:.9rem; color:var(--muted); font-weight:500; }
+  ul { margin:8px 0 0; padding-left:1.1rem; color:var(--muted); }
+  li { margin:6px 0; }
+  footer { margin-top:48px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:.9rem; }
+  .flow { margin:20px 0; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; overflow-x:auto; }
+  .flow .label { font-size:.8rem; color:var(--muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:.06em; }
+  .flow-svg { width:100%; max-width:900px; height:auto; display:block; }
+  .flow-steps { display:none; }
+  @media (max-width:640px) {
+    .flow-svg { display:none; }
+    .flow-steps { display:grid; gap:10px; }
+    .flow-steps .step { background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:12px 14px; font-size:.92rem; }
+    .flow-steps .arrow { color:var(--accent); text-align:center; font-size:.85rem; }
+  }
+</style></head><body><div class="wrap">
+<header><div class="brand">XORA · Lead-to-CRM Autopilot</div><div class="lang"><a class="active" href="./">EN</a><a href="ja/">JA</a></div></header>
+<h1>Leads in. Routed, logged, and drafted — with a person on the send button.</h1>
+<p class="lead">For solo operators and small teams who lose form, DM, or email leads because follow-up is manual. We build an <strong>n8n</strong> pipeline: intake → classify → notify → CRM/Sheet → optional AI reply drafts that a human approves before anything is sent.</p>
+<div class="cta-row"><a class="btn btn-primary" href="../contact.html">Ask about a build</a><a class="btn btn-ghost" href="#pricing">See pricing</a></div>
+<p class="note"><strong>Honest:</strong> new packaged offer (as of 2026-10-05). No past automation revenue claims. We automate routing and drafts — not guaranteed closes. AI never auto-sends unless you insist in writing after a dry run.</p>
+
+<div class="flow" id="flow">
+  <div class="label">Example flow</div>
+  <svg class="flow-svg" viewBox="0 0 880 140" role="img" aria-label="Example lead flow: Form or email to Classify to Notify Slack to CRM or Sheet to AI draft to Human approve then Reply">
+    <defs>
+      <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#ffdc50"/></marker>
+    </defs>
+    <rect x="8" y="36" width="108" height="52" rx="10" fill="#0f1115" stroke="#2a2e38"/>
+    <text x="62" y="58" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">Form / email</text>
+    <text x="62" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">/ webhook</text>
+    <line x1="116" y1="62" x2="148" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arr)"/>
+    <rect x="152" y="36" width="100" height="52" rx="10" fill="#0f1115" stroke="#2a2e38"/>
+    <text x="202" y="66" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">Classify</text>
+    <line x1="252" y1="62" x2="284" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arr)"/>
+    <rect x="288" y="36" width="108" height="52" rx="10" fill="#0f1115" stroke="#2a2e38"/>
+    <text x="342" y="58" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">Notify</text>
+    <text x="342" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">Slack / Notion</text>
+    <line x1="396" y1="62" x2="428" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arr)"/>
+    <rect x="432" y="36" width="108" height="52" rx="10" fill="#0f1115" stroke="#2a2e38"/>
+    <text x="486" y="58" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">CRM / Sheet</text>
+    <text x="486" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">+ status fields</text>
+    <line x1="540" y1="62" x2="572" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arr)"/>
+    <rect x="576" y="36" width="100" height="52" rx="10" fill="#0f1115" stroke="#5a5230"/>
+    <text x="626" y="58" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">AI draft</text>
+    <text x="626" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">(optional)</text>
+    <line x1="676" y1="62" x2="708" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arr)"/>
+    <rect x="712" y="36" width="152" height="52" rx="10" fill="#0f1115" stroke="#ffdc50"/>
+    <text x="788" y="58" text-anchor="middle" fill="#ffdc50" font-size="12" font-family="system-ui,sans-serif">Human approves</text>
+    <text x="788" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">then reply sends</text>
+  </svg>
+  <div class="flow-steps">
+    <div class="step">1. Form / email / webhook</div>
+    <div class="arrow">↓</div>
+    <div class="step">2. Classify</div>
+    <div class="arrow">↓</div>
+    <div class="step">3. Notify (Slack / Notion)</div>
+    <div class="arrow">↓</div>
+    <div class="step">4. CRM / Sheet + status</div>
+    <div class="arrow">↓</div>
+    <div class="step">5. AI draft (optional)</div>
+    <div class="arrow">↓</div>
+    <div class="step">6. Human approves → reply sends</div>
+  </div>
+</div>
+
+<h2 id="pricing">Pricing</h2>
+<div class="grid">
+<div class="card"><div>Build</div><div class="price">$790 <span>USD</span></div><ul><li>1–2 n8n flows: form/email/webhook → Slack/Notion/Sheets or simple CRM → status fields</li><li>Ops checklist + test recording · 1 revision</li><li>Typically 7–14 days after access + kickoff</li></ul></div>
+<div class="card featured"><div>Build + AI reply drafts · recommended</div><div class="price">$1,490 <span>USD</span></div><ul><li>Everything in Build</li><li>LLM drafts replies from your tone notes</li><li><strong>AI drafts; a person approves every reply before it is sent</strong></li></ul></div>
+<div class="card"><div>Optional upkeep</div><div class="price">$190 <span>/ month</span></div><ul><li>Light monitoring, small tweaks, monthly health check</li><li>Cancel anytime</li></ul></div>
+</div>
+<p class="note">Payment: Wise <strong>50% upfront</strong> / 50% on handoff for direct clients; Freelancer clients pay via milestones.</p>
+
+<h2>What gets connected</h2>
+<div class="grid">
+<div class="card"><strong>Intake</strong><p class="note" style="margin:8px 0 0">Web forms, Gmail, webhooks, or similar sources you already use.</p></div>
+<div class="card"><strong>Notify</strong><p class="note" style="margin:8px 0 0">Slack, Notion, email — so someone sees the lead fast.</p></div>
+<div class="card"><strong>Record</strong><p class="note" style="margin:8px 0 0">Google Sheets, Notion DB, HubSpot free tier, or a simple CRM you name.</p></div>
+<div class="card"><strong>Draft (optional)</strong><p class="note" style="margin:8px 0 0">LLM reply drafts from your tone notes — never blind auto-send by default.</p></div>
+</div>
+<p class="note">Exotic CRMs or custom APIs may need extra scope. You own the n8n instance credentials; we do not hold your production secrets long-term.</p>
+
+<h2>Delivery steps</h2>
+<div class="grid">
+<div class="card"><strong>1. Access + brief</strong><p class="note" style="margin:8px 0 0">Share tools and a short kickoff (call or async).</p></div>
+<div class="card"><strong>2. Pay 50%</strong><p class="note" style="margin:8px 0 0">Wise invoice or Freelancer milestone.</p></div>
+<div class="card"><strong>3. Build + dry run</strong><p class="note" style="margin:8px 0 0">We wire flows, test with sample leads, you approve.</p></div>
+<div class="card"><strong>4. Handoff</strong><p class="note" style="margin:8px 0 0">Docs, checklist, recording after the second 50%.</p></div>
+</div>
+
+<h2>What this is not</h2>
+<ul>
+<li>Not a guaranteed closer or lead-gen agency.</li>
+<li>Not fully autonomous AI sending (unless you insist in writing after a dry run).</li>
+<li>Not a replacement for your product, offer, or sales judgment.</li>
+<li>No invented client results or performance stats.</li>
+</ul>
+
+<div class="card" style="margin-top:24px"><strong>Ryusei Kanzaki (神﨑隆聖) · XORA</strong><p class="note" style="margin:8px 0 0"><a href="../contact.html">Contact</a> or Freelancer.</p></div>
+<footer><p>© 2026 XORA.</p><p><a href="../">← XORA site</a></p></footer>
+</div></body></html>

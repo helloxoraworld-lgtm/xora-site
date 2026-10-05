@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XORA GEOスターター — AI回答での見え方診断と修正</title>
+<meta name="description" content="GEOスターター：ChatGPT/Perplexity系で自社が引用されるかを診断（$190）、またはFAQ/スキーマ等の実装＋記事3本＋30日再計測（$990）。順位・引用の保証なし。">
+<link rel="canonical" href="https://helloxoraworld-lgtm.github.io/xora-site/geo-starter/ja/">
+<style>
+  :root { --bg:#0f1115; --card:#181b22; --text:#e8e9ee; --muted:#9aa0ae; --accent:#ffdc50; --line:#2a2e38; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
+  a { color:var(--accent); }
+  .wrap { max-width:980px; margin:0 auto; padding:28px 20px 80px; }
+  header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:28px; flex-wrap:wrap; }
+  .brand { font-weight:700; letter-spacing:.04em; }
+  .lang a { color:var(--muted); text-decoration:none; margin-left:10px; font-size:.9rem; }
+  .lang a.active { color:var(--accent); }
+  h1 { font-size:clamp(1.7rem, 4vw, 2.5rem); line-height:1.15; margin:0 0 12px; }
+  .lead { color:var(--muted); font-size:1.05rem; max-width:42rem; }
+  .cta-row { display:flex; flex-wrap:wrap; gap:12px; margin:20px 0 8px; }
+  .btn { display:inline-block; text-decoration:none; padding:12px 18px; border-radius:10px; font-weight:650; }
+  .btn-primary { background:var(--accent); color:#151515; }
+  .btn-ghost { border:1px solid var(--line); color:var(--text); }
+  .note { color:var(--muted); font-size:.88rem; margin:10px 0 28px; }
+  h2 { margin:40px 0 12px; font-size:1.3rem; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; }
+  .card.featured { border-color:#5a5230; }
+  .price { font-size:1.75rem; font-weight:750; margin:8px 0; }
+  .price span { font-size:.9rem; color:var(--muted); font-weight:500; }
+  ul { margin:8px 0 0; padding-left:1.1rem; color:var(--muted); }
+  li { margin:6px 0; }
+  footer { margin-top:48px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:.9rem; }
+  .flow { margin:20px 0; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; overflow-x:auto; }
+  .flow .label { font-size:.8rem; color:var(--muted); margin-bottom:12px; letter-spacing:.06em; }
+  .flow-svg { width:100%; max-width:900px; height:auto; display:block; }
+  .flow-steps { display:none; }
+  .warn { border:1px solid #5a4030; background:#1a1510; border-radius:14px; padding:16px 18px; color:var(--muted); font-size:.95rem; margin:16px 0 8px; }
+  .warn strong { color:var(--accent); }
+  @media (max-width:640px) {
+    .flow-svg { display:none; }
+    .flow-steps { display:grid; gap:10px; }
+    .flow-steps .step { background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:12px 14px; font-size:.92rem; }
+    .flow-steps .arrow { color:var(--accent); text-align:center; font-size:.85rem; }
+  }
+</style></head><body><div class="wrap">
+<header><div class="brand">XORA · GEOスターター</div><div class="lang"><a href="../">EN</a><a class="active" href="./">JA</a></div></header>
+<h1>買い手がAIに聞いたとき、自社が出るか。出ない理由を測る。</h1>
+<p class="lead">英語・日本語の B2B SaaS・専門サービス向けのGEO（生成AIでの見え方対策）。ChatGPT / Perplexity 系の回答で自社が引用されるか（または無視されるか）を診断し、必要ならFAQ・スキーマ・エンティティの整理まで実装します。</p>
+<div class="cta-row"><a class="btn btn-primary" href="../../contact.html">相談する</a><a class="btn btn-ghost" href="#pricing">料金を見る</a></div>
+<div class="warn"><strong>順位・引用の保証はありません。</strong>AIの回答は変わります。測るのは前後のスナップショットであり、永続的な順位ではありません。偽レビュー、リンク売買、競合コピーの盗用はしません。</div>
+<p class="note"><strong>正直に：</strong>パッケージ化したのは新しいサービスです（2026-10-05時点）。架空の引用率や「ChatGPTで1位」といった主張はありません。実在のサイトと明確なニッチがある場合に向きます。</p>
+
+<div class="flow" id="flow">
+  <div class="label">流れの例（example flow）</div>
+  <svg class="flow-svg" viewBox="0 0 880 140" role="img" aria-label="例：プロンプト調査 → 引用マップ → ギャップ一覧 → オンページ修正 → 30日再計測">
+    <defs>
+      <marker id="arrgj" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#ffdc50"/></marker>
+    </defs>
+    <rect x="8" y="36" width="120" height="52" rx="10" fill="#0f1115" stroke="#2a2e38"/>
+    <text x="68" y="58" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">プロンプト調査</text>
+    <text x="68" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">AIツール</text>
+    <line x1="128" y1="62" x2="160" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arrgj)"/>
+    <rect x="164" y="36" width="120" height="52" rx="10" fill="#0f1115" stroke="#2a2e38"/>
+    <text x="224" y="58" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">引用マップ</text>
+    <text x="224" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">自社 vs 競合</text>
+    <line x1="284" y1="62" x2="316" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arrgj)"/>
+    <rect x="320" y="36" width="120" height="52" rx="10" fill="#0f1115" stroke="#2a2e38"/>
+    <text x="380" y="58" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">ギャップ一覧</text>
+    <text x="380" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">優先約10項目</text>
+    <line x1="440" y1="62" x2="472" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arrgj)"/>
+    <rect x="476" y="36" width="160" height="52" rx="10" fill="#0f1115" stroke="#5a5230"/>
+    <text x="556" y="58" text-anchor="middle" fill="#e8e9ee" font-size="12" font-family="system-ui,sans-serif">オンページ修正</text>
+    <text x="556" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">FAQ / スキーマ / 記事</text>
+    <line x1="636" y1="62" x2="668" y2="62" stroke="#ffdc50" stroke-width="2" marker-end="url(#arrgj)"/>
+    <rect x="672" y="36" width="192" height="52" rx="10" fill="#0f1115" stroke="#ffdc50"/>
+    <text x="768" y="58" text-anchor="middle" fill="#ffdc50" font-size="12" font-family="system-ui,sans-serif">30日再計測</text>
+    <text x="768" y="74" text-anchor="middle" fill="#9aa0ae" font-size="11" font-family="system-ui,sans-serif">前後スナップショット</text>
+  </svg>
+  <div class="flow-steps">
+    <div class="step">1. プロンプト調査（AIツール）</div>
+    <div class="arrow">↓</div>
+    <div class="step">2. 引用マップ（自社 vs 競合）</div>
+    <div class="arrow">↓</div>
+    <div class="step">3. ギャップ一覧（優先約10項目）</div>
+    <div class="arrow">↓</div>
+    <div class="step">4. オンページ修正（FAQ / スキーマ / 記事）</div>
+    <div class="arrow">↓</div>
+    <div class="step">5. 30日再計測（前後スナップショット）</div>
+  </div>
+</div>
+
+<h2 id="pricing">料金</h2>
+<div class="grid">
+<div class="card"><div>診断</div><div class="price">$190 <span>USD</span></div><ul><li>競合の引用マップ（スクショ）</li><li>ギャップ約10項目＋優先修正案</li><li>約5〜7日</li></ul></div>
+<div class="card featured"><div>実装 · おすすめ</div><div class="price">$990 <span>USD</span></div><ul><li>診断のすべて</li><li>FAQ・スキーマ・エンティティの整理</li><li>引用向きコンテンツ <strong>3本</strong></li><li>30日後の再計測レポート · 構築フェーズ約14〜21日</li></ul></div>
+</div>
+<p class="note">支払い：直販は Wise で<strong>着手金50%</strong>／納品時50%。Freelancer経由はマイルストーン。</p>
+
+<h2>得られるもの</h2>
+<div class="grid">
+<div class="card"><strong>感覚ではなく証拠</strong><p class="note" style="margin:8px 0 0">プロンプト調査と、いま誰が引用されているかのスクショ（自社が出ない場合も含む）。</p></div>
+<div class="card"><strong>動けるギャップ</strong><p class="note" style="margin:8px 0 0">優先度付きの短いリスト（約10項目）。自分で直すことも、こちらに依頼することもできます。</p></div>
+<div class="card"><strong>ページの明確さ</strong><p class="note" style="margin:8px 0 0">モデルがニッチを読み取りやすいFAQ・スキーマ・エンティティ表現（実装パッケージ）。</p></div>
+<div class="card"><strong>再計測</strong><p class="note" style="margin:8px 0 0">30日後の前後スナップショットレポート（実装）。それでも保証ではありません。</p></div>
+</div>
+
+<h2>納品の流れ</h2>
+<div class="grid">
+<div class="card"><strong>1. サイト＋ニッチの共有</strong><p class="note" style="margin:8px 0 0">URL、想定買い手、競合名、言語（日/英）。</p></div>
+<div class="card"><strong>2. 着手金50%</strong><p class="note" style="margin:8px 0 0">Wise請求書またはFreelancerマイルストーン。</p></div>
+<div class="card"><strong>3. 診断（と実装）</strong><p class="note" style="margin:8px 0 0">調査 → マップ → ギャップ。実装では修正＋記事3本も。</p></div>
+<div class="card"><strong>4. 引き渡し＋再計測</strong><p class="note" style="margin:8px 0 0">納品時に残り50%。実装には30日後の再計測を含む。</p></div>
+</div>
+
+<h2>このサービスでないもの</h2>
+<ul>
+<li><strong>順位・引用の保証なし</strong> — モデルと回答は変わります。</li>
+<li>従来型SEOの被リンク買い集めや「ChatGPT掲載保証」ではありません。</li>
+<li>偽レビュー、PBN、競合コピーの盗用はしません。</li>
+<li>実在サイトや明確なニッチがない場合には向きません。</li>
+</ul>
+
+<div class="card" style="margin-top:24px"><strong>神﨑隆聖（Ryusei Kanzaki）· XORA</strong><p class="note" style="margin:8px 0 0"><a href="../../contact.html">問い合わせ</a> または Freelancer。</p></div>
+<footer><p>© 2026 XORA.</p><p><a href="../../">← XORAサイト</a></p></footer>
+</div></body></html>
